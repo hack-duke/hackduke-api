@@ -59,8 +59,8 @@ describe 'Database Synchronization' do
       puts 'Invoking mailchimp resque job to sync up mailchimp...'
       Rake::Task['resque:mailchimp'].invoke
 
-      puts 'Sleeping for 3 minutes to allow changes to propagate on mailchimp...'
-      sleep 180
+      puts 'Sleeping for 5 minutes to allow changes to propagate on mailchimp...'
+      sleep 300
 
       Event.where(active: 1).each do |event|
         puts "Validating mailchimp lists for #{event.event_type} #{event.semester.season} #{event.semester.year}"
