@@ -1,5 +1,5 @@
 #HackDuke API
-[![Build Status](https://travis-ci.org/hack-duke/hackduke-registration-api.svg?branch=master)](https://travis-ci.org/hack-duke/hackduke-api)
+[![Build Status](https://travis-ci.org/hack-duke/hackduke-api.svg?branch=master)](https://travis-ci.org/hack-duke/hackduke-api)
 
 ##Overview
 This API serves to facilitate registration for all HackDuke events through typeform. The use of typeform allows
