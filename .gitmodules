@@ -1,0 +1,3 @@
+[submodule "public/print"]
+	path = public/print
+	url = https://github.com/hack-duke/print-registration
