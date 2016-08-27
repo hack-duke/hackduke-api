@@ -15,7 +15,7 @@ the quick creation of forms for any event given that the questions have a corres
 ##Getting Started
 - download postgresql at http://postgresapp.com/ (for mac)
 - use rbenv for ruby versioning (currently on 2.2.3)
-- run cp ../hackduke-secrets/.env-hackduke-api .env (assuming that
+- run cp ../hackduke-secrets/.env-hackduke-registration-api .env (assuming that
 hackduke-secrets and hackduke-api share the same parent folder)
 - run bundle install and then rails s (there may be complications)
 - if you're having trouble with nokogiri, you may have to run xcode-select --install
