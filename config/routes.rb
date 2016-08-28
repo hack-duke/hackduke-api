@@ -34,7 +34,6 @@ Rails.application.routes.draw do
   require "resque_web"
   mount ResqueWeb::Engine => "/resque_web"
 
-
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
