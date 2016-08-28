@@ -39,7 +39,7 @@ module TypeformUtil
 
   # removes all non-alphanumeric/space characters
   def split_clean_question(question)
-    question.downcase.gsub(/[^a-z0-9\s]/i, '').split(' ')
+    question.downcase.gsub(/[^a-z0-9\s]/i, '').split(' ') 
   end
 
   def no_route_error(fid)
