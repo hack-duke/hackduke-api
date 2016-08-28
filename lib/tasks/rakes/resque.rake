@@ -19,7 +19,7 @@ namespace :resque do
 
   task :mailchimp => :setup do
     Mailchimp.perform('unsubscribe')
-    sleep 10
+    sleep 120
     Mailchimp.perform('subscribe')
   end
 
