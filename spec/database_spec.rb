@@ -41,7 +41,11 @@ describe 'Database Synchronization' do
       end
 
       puts ''
-      puts 'Randomly assigning stauses to participants for code_for_good spring 2000 (test event) and design_con spring 2016'
+      puts 'Making code_for_good spring 2000 (test event) and design_con spring 2016 the only active events...'
+      active_events.each do |active_event|
+        active_event.active = 0
+        active_event.save!
+      end
       events = []
       events << Event.joins(:semester).where('semesters.year = ? AND semesters.season = ? AND event_type = ?', 2000, 
                                               Semester.seasons['spring'], Event.event_types['code_for_good']).first
@@ -49,7 +53,11 @@ describe 'Database Synchronization' do
                                               Semester.seasons['spring'], Event.event_types['design_con']).first
       events = events.select{|event| event != nil}
       expect(events.length).to eql(2)
+
+      'Randomly assigning stauses to participants...'
       events.each do |event|
+        event.active = 1
+        event.save!
         Participant.where(event_id: event.id).each do |participant|
           participant.status = rand(Participant.statuses.keys.size)
           participant.save!
@@ -59,8 +67,8 @@ describe 'Database Synchronization' do
       puts 'Invoking mailchimp resque job to sync up mailchimp... (this takes a while...)'
       Rake::Task['resque:mailchimp'].invoke
 
-      puts 'Sleeping for 1 minute to allow changes to propagate on mailchimp...'
-      sleep 60
+      puts 'Sleeping for 2 minutes to allow changes to propagate on mailchimp...'
+      sleep 120
 
       Event.where(active: 1).each do |event|
         puts "Validating mailchimp lists for #{event.event_type} #{event.semester.season} #{event.semester.year}"

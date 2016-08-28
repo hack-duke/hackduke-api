@@ -18,9 +18,7 @@ namespace :resque do
   end
 
   task :mailchimp => :setup do
-    Mailchimp.perform('unsubscribe')
-    sleep 120
-    Mailchimp.perform('subscribe')
+    Mailchimp.perform('sync')
   end
 
   task :test_database => :setup do
