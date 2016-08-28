@@ -14,6 +14,10 @@ class Mailchimp
     operations = []
     mailchimp_ids = event.mailchimp_ids[0].split(',')
     event.participants.each do |participant|
+      if participant.attending == 1 && participant.status = 'accepted'
+        participant.status = 'confirmed'
+        participant.save!
+      end
       person = participant.person
       mailchimp_ids.each_with_index do |id, index|
         if index == Participant.statuses[participant.status]
