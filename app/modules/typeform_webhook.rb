@@ -17,20 +17,21 @@ module TypeformWebhook
       no_route_error(form_response[:form_id])
       return {}
     end
-      role = route[2]
-      model = role.classify.constantize
-      hidden_email = form_response[:hidden]['email']
-      role_hash = create_info_hash(model, form_response[:definition][:fields], form_response[:answers])
-      person = create_info_hash(Person, form_response[:definition][:fields], form_response[:answers])
-      replace_email_if_necessary(hidden_email, person)
-      params = { form_id: form_response[:form_id], person: person, role_sym => role_hash, role: role,
-      submit_date: DateTime.parse(form_response[:submitted_at])} 
+    role = route[2]
+    model = role.classify.constantize
+    hidden_email = form_response[:hidden]['email']
+    role_hash = create_webhook_info_hash(model, form_response[:definition][:fields], form_response[:answers])
+    person = create_webhook_info_hash(Person, form_response[:definition][:fields], form_response[:answers])
+    replace_email_if_necessary(hidden_email, person)
+    role_sym = role.parameterize.underscore.to_sym 
+    params = { form_id: form_response[:form_id], person: person, role_sym => role_hash, role: role,
+    submit_date: DateTime.parse(form_response[:submitted_at])} 
     end
 
-  def create_info_hash(model, fields, answers)
+  def create_webhook_info_hash(model, fields, answers)
     hash = {}
     model.column_names.each do |model_field|
-      result = extract_result(fields, model_field, answers) 
+      result = extract_webhook_result(fields, model_field, answers) 
       if valid_result(result, model_field)
         if model.new[model_field] == nil
           result = result[0]
@@ -63,24 +64,24 @@ module TypeformWebhook
     answers.flatten
   end
 
-  def extract_result(fields, model_field, answers)
+  def extract_webhook_result(fields, model_field, answers)
     if model_field == "custom"
-      determine_custom(fields, model_field, answers)
+      determine_webhook_custom(fields, model_field, answers)
     else
-      determine_regular(fields, model_field, answers)
+      determine_webhook_regular(fields, model_field, answers)
     end
   end
 
-  def determine_custom(fields, model_field, answers)
+  def determine_webhook_custom(fields, model_field, answers)
     result = []
-    determine_custom_fields(fields).each do |f|
+    determine_webhook_custom_fields(fields).each do |f|
       result << f['title']
       result << get_answer_by_id(answers, f['id'])
     end
     result.flatten
   end
 
-  def determine_custom_fields(fields)
+  def determine_webhook_custom_fields(fields)
     custom_fields = []
     fields.each do |f|
       if f['title'].include? 'Q:'
@@ -100,24 +101,24 @@ module TypeformWebhook
     answer
   end
 
-  def determine_regular(fields, model_field, answers)
+  def determine_webhook_regular(fields, model_field, answers)
     result = []
     fields.each do |f|
-      if correct_field(model_field, f)
+      if correct_webhook_field(model_field, f)
         result = get_answer_by_id(answers, f['id'])
       end
     end
     result
   end
 
-  def correct_field(model_field, field) 
-    correct_field = true
+  def correct_webhook_field(model_field, field) 
+    correct_typeform_field = true
     model_field.split('_').each do |f|
       if !split_clean_question(field['title']).include? f
-        correct_field = false
+        correct_typeform_field = false
       end
     end
-    correct_field
+    correct_typeform_field
   end
 
 end
