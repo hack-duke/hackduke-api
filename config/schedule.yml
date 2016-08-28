@@ -1,6 +1,6 @@
 typeform:
   every:
-    - "90m"
+    - "30m"
   args: "sync"
   class: Typeform
   queue: high
@@ -9,18 +9,9 @@ typeform:
 
 mailchimp_subscribe:
   every:
-    - "55m"
-  args: "subscribe"
+    - "30m"
+  args: "sync"
   class: Mailchimp
   queue: high
   description: Unsubscribe to sync mailchimp with database
-  rails_env: development, production, staging
-
-mailchimp_unsubscribe:
-  every:
-    - "60m"
-  args: "unsubscribe"
-  class: Mailchimp
-  queue: high
-  description: Subscribe to sync mailchimp with database
   rails_env: development, production, staging

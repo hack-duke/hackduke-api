@@ -11,7 +11,11 @@ module PeopleUtil
     role = model.joins(:person).where('people.email = ? AND event_id = ?', email, event.id).first
     if role != nil
       role_params = params[params[:role].to_sym]
-      if role_params.to_unsafe_h.size > 0 
+      role_hash = role_params
+      if !role_params.is_a? Hash 
+        role_hash = role_params.to_unsafe_h
+      end
+      if role_hash.size > 0 
         # update attributes if parameters for the role have been provided
         role.update_attributes(role_params(params[:role], params))
         # update status if participant and attending has become true
@@ -115,7 +119,7 @@ module PeopleUtil
   # parameters dynamically determine by the person's role
   # must be updated every time schema changes
   def role_params(role, params)
-    params = ActionController::Parameters.new(params.to_unsafe_h)
+    params = prepare_hash_as_params(params)
     case Person.roles[role]
     when 0
       return params.require(:participant).permit(:status, :school, :website, :resume, :attending, :github, 
@@ -133,8 +137,16 @@ module PeopleUtil
   end
 
   def person_params(params)
-    params = ActionController::Parameters.new(params.to_unsafe_h)
+    params = prepare_hash_as_params(params)
     params.require(:person).permit(:first_name, :gender, :last_name, :email, :phone, :slack_id)
+  end
+
+  def prepare_hash_as_params(params)
+    if !params.is_a? Hash
+      params = ActionController::Parameters.new(params.to_unsafe_h)
+    else
+      params = ActionController::Parameters.new(params)
+    end
   end
 
 end
