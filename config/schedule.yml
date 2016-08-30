@@ -13,5 +13,5 @@ mailchimp_subscribe:
   args: "sync"
   class: Mailchimp
   queue: high
-  description: Unsubscribe to sync mailchimp with database
+  description: Syns mailchimp with database
   rails_env: development, production, staging
