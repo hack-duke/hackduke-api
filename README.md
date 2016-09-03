@@ -34,7 +34,6 @@ or there have been invalid emails added (you can filter them out in the Mailchim
 the test to pass again)
 
 ##Services
-- Judging bot: SLACK_API_TOKEN=(see hackduke-secrets for slack token) bundle exec rake bot:application
 - Typeform: bundle exec rake resque:typeform
 - Mailchimp: bundle exec rake resque:mailchimp
 - Crons (typeform, mailchimp): bundle exec rake resque:scheduler (see scheduler at config/schedule.yml)
