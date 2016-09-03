@@ -25,7 +25,11 @@ Rails.application.routes.draw do
       post :update_role_push
       post :receive_role
       post :update_role
+      post :update_role_external
+      post :roles
       post :event
+      post :ids
+      post :id
     end
   end
 
