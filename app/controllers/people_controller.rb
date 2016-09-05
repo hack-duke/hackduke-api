@@ -13,6 +13,14 @@ class PeopleController < ApplicationController
     render json: roles.map { |role| role.id }
   end
 
+  def role
+    semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
+    event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
+    model = params[:role].classify.constantize
+    role = model.joins(:person).where('people.email = ? AND event_id = ?', params[:email], event.id).first
+    render json: {:person => role.person, :role => role}
+  end
+
   def roles
     semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
     event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
