@@ -9,6 +9,12 @@ gem 'slack'
 gem 'giphy'
 gem 'slack-ruby-client'
 
+# for database password
+gem 'bcrypt'
+
+# for mandrill
+gem 'mandrill-api'
+
 # for database dumps
 gem 'yaml_db'
 
