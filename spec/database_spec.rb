@@ -54,7 +54,7 @@ describe 'Database Synchronization' do
       events = events.select{|event| event != nil}
       expect(events.length).to eql(2)
 
-      'Randomly assigning stauses to participants...'
+      puts 'Randomly assigning stauses to participants...'
       events.each do |event|
         event.active = 1
         event.save!
@@ -67,8 +67,8 @@ describe 'Database Synchronization' do
       puts 'Invoking mailchimp resque job to sync up mailchimp... (this takes a while...)'
       Rake::Task['resque:mailchimp'].invoke
 
-      puts 'Sleeping for 2 minutes to allow changes to propagate on mailchimp...'
-      sleep 120
+      puts 'Sleeping for 3 minutes to allow changes to propagate on mailchimp...'
+      sleep 180
 
       Event.where(active: 1).each do |event|
         puts "Validating mailchimp lists for #{event.event_type} #{event.semester.season} #{event.semester.year}"
