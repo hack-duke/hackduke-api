@@ -31,6 +31,9 @@ Rails.application.routes.draw do
       post :event
       post :ids
       post :id
+      post :authenticate
+      post :reset_password
+      post :set_password
     end
   end
 
