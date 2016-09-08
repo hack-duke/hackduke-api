@@ -12,6 +12,10 @@ gem 'slack-ruby-client'
 # for database dumps
 gem 'yaml_db'
 
+
+# for session management 
+gem 'activerecord-session_store'
+
 # for testing
 gem 'rspec-rails'
 gem 'database_cleaner'
