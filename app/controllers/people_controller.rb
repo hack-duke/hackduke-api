@@ -123,7 +123,6 @@ class PeopleController < ApplicationController
       ip_pool = "Main Pool"
       send_at = DateTime.now.to_s
       result = mandrill.messages.send message, async, ip_pool, send_at
-      puts temp_password
       @user.temp_password = Password.create(temp_password)
       @user.temp_password_datetime = DateTime.now
       @user.password = nil
