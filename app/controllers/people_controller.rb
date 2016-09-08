@@ -90,11 +90,13 @@ class PeopleController < ApplicationController
   def set_password
     @user = Person.find_by_email(params[:email])
     if @user != nil
+      session_token = SecureRandom.hex
+      @user.session_token = session_token
       @user.password = Password.create(params[:password])
       @user.temp_password = nil
       @user.temp_password_datetime = nil
       @user.save!
-      render json: {:success => "New password set successfully", :authentication => "permanent"}
+      render json: {:success => "New password set successfully", :authentication => "permanent", :session_token => session_token}
     else
       render json: {:errors => "Your email could not be found!"}
     end 
