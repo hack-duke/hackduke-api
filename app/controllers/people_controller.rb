@@ -21,7 +21,11 @@ class PeopleController < ApplicationController
     event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
     model = params[:role].classify.constantize
     role = model.joins(:person).where('people.email = ? AND event_id = ?', params[:email], event.id).first
-    render json: {:person => role.person, :role => role}
+    if role != nil 
+      render json: {:person => role.person, :role => role}
+    else
+      render json: {:errors => 'That role does not exist'}
+    end
   end
 
   def roles
@@ -86,11 +90,13 @@ class PeopleController < ApplicationController
   def set_password
     @user = Person.find_by_email(params[:email])
     if @user != nil
+      session_token = SecureRandom.hex
+      @user.session_token = session_token
       @user.password = Password.create(params[:password])
       @user.temp_password = nil
       @user.temp_password_datetime = nil
       @user.save!
-      render json: {:success => "New password set successfully", :authentication => "permanent"}
+      render json: {:success => "New password set successfully", :authentication => "permanent", :session_token => session_token}
     else
       render json: {:errors => "Your email could not be found!"}
     end 
