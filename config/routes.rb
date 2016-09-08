@@ -27,9 +27,14 @@ Rails.application.routes.draw do
       post :update_role
       post :update_role_external
       post :roles
+      post :role
       post :event
       post :ids
       post :id
+      post :authenticate
+      post :reset_password
+      post :set_password
+      post :logout
     end
   end
 

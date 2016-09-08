@@ -1,9 +1,12 @@
+require 'mandrill'
+
 class PeopleController < ApplicationController
   respond_to :json, :html
   include PeopleUtil
   include TypeformWebhook
   include TypeformUtil
   include EventsUtil
+  include BCrypt
 
   def ids
     semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
@@ -11,6 +14,14 @@ class PeopleController < ApplicationController
     role_type = params[:role]
     roles = event.send(role_type.pluralize)
     render json: roles.map { |role| role.id }
+  end
+
+  def role
+    semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
+    event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
+    model = params[:role].classify.constantize
+    role = model.joins(:person).where('people.email = ? AND event_id = ?', params[:email], event.id).first
+    render json: {:person => role.person, :role => role}
   end
 
   def roles
@@ -25,6 +36,95 @@ class PeopleController < ApplicationController
     role_type = params[:role]
     model = role_type.classify.constantize
     render json: model.find(params[:id])
+  end
+
+  def authenticate
+    @user = Person.find_by_email(params[:email])
+    permanent_pass_correct = false
+    temporary_pass_correct = false
+    temporary_pass_expired = true
+    if @user != nil
+      if @user.session_token == params[:session_token]
+        session_token = SecureRandom.hex
+        @user.session_token = session_token
+        @user.save!
+        render json: {:success => "Person successfully authenticated", :authentication => "permanent", :session_token => session_token}
+        return 
+      end
+      if @user.password != nil
+        unencrypted_password = Password.new(@user.password)
+        permanent_pass_correct = unencrypted_password == params[:password]
+      elsif @user.temp_password != nil
+        unencrypted_temp_password = Password.new(@user.temp_password)
+        temporary_pass_correct = unencrypted_temp_password == params[:password]
+        if @user.temp_password_datetime != nil
+          temp_password_datetime = DateTime.parse(@user.temp_password_datetime.to_s)
+          temporary_pass_expired = ((DateTime.now - temp_password_datetime)*24*60).to_i > 30
+        end
+      else
+        render json: {:errors => "Please request a temporary password first!"}
+      end
+      if temporary_pass_correct
+        if !temporary_pass_expired
+          render json: {:success => "Please set your new password!", :authentication => "temporary"}
+        else
+          render json: {:errors => "Your temporary password has expired, please request another one!"}
+        end
+      elsif permanent_pass_correct
+        session_token = SecureRandom.hex
+        @user.session_token = session_token
+        @user.save!
+        render json: {:success => "Person successfully authenticated", :authentication => "permanent", :session_token => session_token}
+      elsif @user.password != nil || @user.temp_password != nil
+        render json: {:errors => "Your password was invalid, please try again!"}
+      end
+    else
+      render json: {:errors => "Your email could not be found!"}
+    end
+  end
+
+  def set_password
+    @user = Person.find_by_email(params[:email])
+    if @user != nil
+      @user.password = Password.create(params[:password])
+      @user.temp_password = nil
+      @user.temp_password_datetime = nil
+      @user.save!
+      render json: {:success => "New password set successfully", :authentication => "permanent"}
+    else
+      render json: {:errors => "Your email could not be found!"}
+    end 
+  end
+
+  def reset_password
+    @user = Person.find_by_email(params[:email])
+    if @user != nil 
+      temp_password = SecureRandom.hex(8)
+      mandrill = Mandrill::API.new Rails.application.secrets.mandrill_key
+      message = {
+       "tags"=>["password-resets"],
+       "to"=>
+          [{"name"=> @user.first_name + ' ' + @user.last_name,
+              "type"=>"to",
+              "email"=> params[:email]}],
+       "text"=>"Your temporary password is #{temp_password}. Please log-in and set your new password. This password will expire in 30 minutes.",
+       "from_name"=>"HackDuke",
+       "subject"=>"Your HackDuke password",
+       "merge"=>true,
+       "from_email"=>"register@hackduke.org",
+      }
+      async = false
+      ip_pool = "Main Pool"
+      send_at = DateTime.now.to_s
+      result = mandrill.messages.send message, async, ip_pool, send_at
+      @user.temp_password = Password.create(temp_password)
+      @user.temp_password_datetime = DateTime.now
+      @user.password = nil
+      @user.save!
+      render json: {:success => "Temporary password successfully sent!"}
+    else
+      render json: {:errors => "Your email could not be found!"}
+    end
   end
 
   def update_role_external
