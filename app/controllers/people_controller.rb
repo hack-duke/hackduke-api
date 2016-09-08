@@ -21,7 +21,11 @@ class PeopleController < ApplicationController
     event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
     model = params[:role].classify.constantize
     role = model.joins(:person).where('people.email = ? AND event_id = ?', params[:email], event.id).first
-    render json: {:person => role.person, :role => role}
+    if role != nil 
+      render json: {:person => role.person, :role => role}
+    else
+      render json: {:errors => 'That role does not exist'}
+    end
   end
 
   def roles
