@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       post :authenticate
       post :reset_password
       post :set_password
+      post :logout
     end
   end
 

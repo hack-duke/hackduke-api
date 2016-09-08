@@ -44,6 +44,13 @@ class PeopleController < ApplicationController
     temporary_pass_correct = false
     temporary_pass_expired = true
     if @user != nil
+      if @user.session_token == params[:session_token]
+        session_token = SecureRandom.hex
+        @user.session_token = session_token
+        @user.save!
+        render json: {:success => "Person successfully authenticated", :authentication => "permanent", :session_token => session_token}
+        return 
+      end
       if @user.password != nil
         unencrypted_password = Password.new(@user.password)
         permanent_pass_correct = unencrypted_password == params[:password]
@@ -64,7 +71,10 @@ class PeopleController < ApplicationController
           render json: {:errors => "Your temporary password has expired, please request another one!"}
         end
       elsif permanent_pass_correct
-        render json: {:success => "Person successfully authenticated", :authentication => "permanent"}
+        session_token = SecureRandom.hex
+        @user.session_token = session_token
+        @user.save!
+        render json: {:success => "Person successfully authenticated", :authentication => "permanent", :session_token => session_token}
       elsif @user.password != nil || @user.temp_password != nil
         render json: {:errors => "Your password was invalid, please try again!"}
       end
@@ -107,8 +117,6 @@ class PeopleController < ApplicationController
       ip_pool = "Main Pool"
       send_at = DateTime.now.to_s
       result = mandrill.messages.send message, async, ip_pool, send_at
-      puts result
-      puts temp_password
       @user.temp_password = Password.create(temp_password)
       @user.temp_password_datetime = DateTime.now
       @user.password = nil
