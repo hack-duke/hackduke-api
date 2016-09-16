@@ -4,7 +4,6 @@ class CreatePeople < ActiveRecord::Migration[5.0]
    	  t.string :first_name
       t.string :last_name
       t.string :gender
-      t.string :race
       t.string :email
       t.string :phone
       t.string :form_id, array: true, default: []

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160908054733) do
+ActiveRecord::Schema.define(version: 20160916205258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20160908054733) do
     t.integer "event_id"
     t.string  "skills",    default: [], array: true
     t.string  "slack_id"
+    t.string  "track"
     t.index ["event_id"], name: "index_mentors_on_event_id", using: :btree
     t.index ["person_id"], name: "index_mentors_on_person_id", using: :btree
   end
@@ -71,6 +72,7 @@ ActiveRecord::Schema.define(version: 20160908054733) do
     t.string   "slack_id"
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
+    t.string   "track"
     t.index ["event_id"], name: "index_participants_on_event_id", using: :btree
     t.index ["person_id"], name: "index_participants_on_person_id", using: :btree
     t.index ["team_id"], name: "index_participants_on_team_id", using: :btree
@@ -90,6 +92,7 @@ ActiveRecord::Schema.define(version: 20160908054733) do
     t.string   "temp_password"
     t.datetime "temp_password_datetime"
     t.string   "session_token"
+    t.string   "ethnicity"
   end
 
   create_table "projects", force: :cascade do |t|
