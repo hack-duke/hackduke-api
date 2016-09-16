@@ -105,7 +105,7 @@ class PeopleController < ApplicationController
   def reset_password
     @user = Person.find_by_email(params[:email])
     if @user != nil 
-      temp_password = SecureRandom.hex(8)
+      temp_password = SecureRandom.hex(8) 
       mandrill = Mandrill::API.new Rails.application.secrets.mandrill_key
       message = {
        "tags"=>["password-resets"],
@@ -113,16 +113,23 @@ class PeopleController < ApplicationController
           [{"name"=> @user.first_name + ' ' + @user.last_name,
               "type"=>"to",
               "email"=> params[:email]}],
-       "text"=>"Your temporary password is #{temp_password}. Please log-in and set your new password. This password will expire in 30 minutes.",
        "from_name"=>"HackDuke",
        "subject"=>"Your HackDuke password",
        "merge"=>true,
        "from_email"=>"register@hackduke.org",
+       "global_merge_vars": [{
+          "name": "PASSWORD",
+          "content": temp_password,
+        }],
       }
+      
+      template_name = "Temporary Password"
+      template_content = [{}]
+
       async = false
       ip_pool = "Main Pool"
       send_at = DateTime.now.to_s
-      result = mandrill.messages.send message, async, ip_pool, send_at
+      template_result = mandrill.messages.send_template template_name, template_content, message, async, ip_pool, send_at
       @user.temp_password = Password.create(temp_password)
       @user.temp_password_datetime = DateTime.now
       @user.password = nil

@@ -19,6 +19,7 @@ namespace :resque do
 
   task :mailchimp => :setup do
     Mailchimp.perform('sync')
+    #can change to Mailchimp.perform('create') ?
   end
 
   task :test_database => :setup do
