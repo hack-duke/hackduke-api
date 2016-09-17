@@ -7,7 +7,7 @@ module MailchimpUtil
     message = {
      "tags"=>["password-resets"],
      "to"=>
-        [{"name"=> @user.first_name + ' ' + @user.last_name,
+        [{"name"=> user.first_name + ' ' + user.last_name,
             "type"=>"to",
             "email"=> params[:email]}],
      "text"=>"Your temporary password is #{temp_password}. Please log-in and set your new password. This password will expire in 30 minutes.",

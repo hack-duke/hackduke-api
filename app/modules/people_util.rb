@@ -62,7 +62,7 @@ module PeopleUtil
         person.email = email
         role.person = person
         existing_person = person
-        sends email with temporary password if it's a participant
+        # sends email with temporary password if it's a participant
         if params[:role] == 'participant' && !Rails.env.test?
           send_password(person)
         end
