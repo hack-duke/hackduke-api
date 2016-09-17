@@ -40,56 +40,57 @@ describe 'Database Synchronization' do
         expect(database_tester.validate_person_hash(person_hash, email, attribute_hash)).to eql(true)
       end
 
-      puts ''
-      puts 'Making code_for_good spring 2000 (test event) and design_con spring 2016 the only active events...'
-      active_events.each do |active_event|
-        active_event.active = 0
-        active_event.save!
-      end
-      events = []
-      events << Event.joins(:semester).where('semesters.year = ? AND semesters.season = ? AND event_type = ?', 2000, 
-                                              Semester.seasons['spring'], Event.event_types['code_for_good']).first
-      events << Event.joins(:semester).where('semesters.year = ? AND semesters.season = ? AND event_type = ?', 2016, 
-                                              Semester.seasons['spring'], Event.event_types['design_con']).first
-      events = events.select{|event| event != nil}
-      expect(events.length).to eql(2)
+      # puts ''
+      # puts 'Making code_for_good spring 2000 (test event) and design_con spring 2016 the only active events...'
+      # active_events.each do |active_event|
+      #   active_event.active = 0
+      #   active_event.save!
+      # end
+      # events = []
+      # events << Event.joins(:semester).where('semesters.year = ? AND semesters.season = ? AND event_type = ?', 2000, 
+      #                                         Semester.seasons['spring'], Event.event_types['code_for_good']).first
+      # events << Event.joins(:semester).where('semesters.year = ? AND semesters.season = ? AND event_type = ?', 2016, 
+      #                                         Semester.seasons['spring'], Event.event_types['design_con']).first
+      # events = events.select{|event| event != nil}
+      # expect(events.length).to eql(2)
 
-      puts 'Randomly assigning stauses to participants...'
-      events.each do |event|
-        event.active = 1
-        event.save!
-        Participant.where(event_id: event.id).each do |participant|
-          participant.status = rand(Participant.statuses.keys.size)
-          participant.save!
-        end
-      end
+      # puts 'Randomly assigning stauses to participants...'
+      # events.each do |event|
+      #   event.active = 1
+      #   event.save!
+      #   Participant.where(event_id: event.id).each do |participant|
+      #     participant.status = rand(Participant.statuses.keys.size)
+      #     participant.save!
+      #   end
+      # end
 
-      puts 'Invoking mailchimp resque job to sync up mailchimp... (this takes a while...)'
-      Rake::Task['resque:mailchimp'].invoke
+      # puts 'Invoking mailchimp resque job to sync up mailchimp... (this takes a while...)'
+      # Rake::Task['resque:mailchimp'].invoke
 
-      puts 'Sleeping for 5 minutes to allow changes to propagate on mailchimp...'
-      sleep 300
+      # puts 'Sleeping for 5 minutes to allow changes to propagate on mailchimp...'
+      # sleep 300
 
-      Event.where(active: 1).each do |event|
-        puts "Validating mailchimp lists for #{event.event_type} #{event.semester.season} #{event.semester.year}"
-        emails_array = retrieve_emails_for_event(event)
-        emails_array.each_with_index do |array, index|
-          participant_offset = Participant.statuses.keys.size
-          status = Participant.statuses.keys[index]
-          if index < participant_offset
-            database_emails_array = Participant.where(status: index, event_id: event.id).map{|participant| participant.person.email}
-            expect(compare_emails(array, filter_invalid_emails(database_emails_array), 
-                                  "participant #{status}", event)).to eql(true)
-          else
-            role_index = index + 1 - participant_offset
-            role = Person.roles.keys[role_index]
-            model = role.classify.constantize
-            database_emails_array = model.where(event_id: event.id).map{|role| role.person.email}
-            expect(compare_emails(array, filter_invalid_emails(database_emails_array), 
-                                  role, event)).to eql(true)
-          end
-        end
-      end
+      # Event.where(active: 1).each do |event|
+      #   puts "Validating mailchimp lists for #{event.event_type} #{event.semester.season} #{event.semester.year}"
+      #   emails_array = retrieve_emails_for_event(event)
+      #   emails_array.each_with_index do |array, index|
+      #     participant_offset = Participant.statuses.keys.size
+      #     status = Participant.statuses.keys[index]
+      #     if index < participant_offset
+      #       database_emails_array = Participant.where(status: index, event_id: event.id).map{|participant| participant.person.email}
+      #       expect(compare_emails(array, filter_invalid_emails(database_emails_array), 
+      #                             "participant #{status}", event)).to eql(true)
+      #     else
+      #       role_index = index + 1 - participant_offset
+      #       role = Person.roles.keys[role_index]
+      #       model = role.classify.constantize
+      #       database_emails_array = model.where(event_id: event.id).map{|role| role.person.email}
+      #       expect(compare_emails(array, filter_invalid_emails(database_emails_array), 
+      #                             role, event)).to eql(true)
+      #     end
+      #   end
+      # end
+      
     end
   end
 
