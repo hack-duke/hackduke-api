@@ -1,7 +1,7 @@
 require 'mandrill'
-require 'bcrypt'
 
 module MailchimpUtil
+  include BCrypt
 
   def send_password(user, email)
     temp_password = SecureRandom.hex(8)

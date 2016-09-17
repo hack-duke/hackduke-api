@@ -7,7 +7,6 @@ class PeopleController < ApplicationController
   include MailchimpUtil
   include TypeformUtil
   include EventsUtil
-  include BCrypt
 
   def ids
     semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
