@@ -52,18 +52,18 @@ module PeopleUtil
     role = model.joins(:person).where('people.email = ? AND event_id = ?', email, event.id).first
     role_sym = params[:role].parameterize.underscore.to_sym 
     if role == nil
-    # creates new role if the role is not in the database
-    role = model.new(role_params(params[:role], params))
-    role.event = event
-    existing_person = person_exists(email)
+      # creates new role if the role is not in the database
+      role = model.new(role_params(params[:role], params))
+      role.event = event
+      existing_person = person_exists(email)
       if existing_person == nil
         # creates new person if person is not in the database
         person = Person.new(person_params(params))
         person.email = email
         role.person = person
         existing_person = person
-        # sends email with temporary password if it's a participant
-        if params[:role] == 'participant'
+        sends email with temporary password if it's a participant
+        if params[:role] == 'participant' && !Rails.env.test?
           send_password(person)
         end
       else

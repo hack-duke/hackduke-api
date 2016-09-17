@@ -20,10 +20,10 @@ module MailchimpUtil
     ip_pool = "Main Pool"
     send_at = DateTime.now.to_s
     result = mandrill.messages.send message, async, ip_pool, send_at
-    @user.temp_password = Password.create(temp_password)
-    @user.temp_password_datetime = DateTime.now
-    @user.password = nil
-    @user.save!
+    user.temp_password = Password.create(temp_password)
+    user.temp_password_datetime = DateTime.now
+    user.password = nil
+    user.save!
   end
 
   def gibbon
