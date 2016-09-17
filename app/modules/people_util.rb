@@ -62,8 +62,10 @@ module PeopleUtil
         person.email = email
         role.person = person
         existing_person = person
-        # sends email with temporary password
-        send_password(person)
+        # sends email with temporary password if it's a participant
+        if params[:role] == 'participant'
+          send_password(person)
+        end
       else
         # updates the person if the person is in the database
         role.person = existing_person
