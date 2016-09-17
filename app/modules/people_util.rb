@@ -63,8 +63,9 @@ module PeopleUtil
         role.person = person
         existing_person = person
         # sends email with temporary password if it's a participant
+        puts Rails.env.test?
         if params[:role] == 'participant' && !Rails.env.test?
-          send_password(person)
+          puts 'hi'
         end
       else
         # updates the person if the person is in the database
