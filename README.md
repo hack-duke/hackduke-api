@@ -63,7 +63,7 @@ the test to pass again)
 	* first name
 	* last name
 	* gender
-	* race
+	* ethnicity
 	* phone
 - for participants, the following are currently supported: 
   * graduation year
@@ -78,9 +78,10 @@ the test to pass again)
   * travel (used for reimbursements)
   * portfolio
   * skills
-  * race
+  * track
 - for mentors, 
 	* skills
+	* track
 - for speakers, 
 	* topic
 	* date

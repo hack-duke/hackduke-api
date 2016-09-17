@@ -14,7 +14,7 @@ namespace :resque do
   end
 
   task :typeform => :setup do
-    Typeform.perform('sync')
+    # Typeform.perform('sync')
   end
 
   task :mailchimp => :setup do
