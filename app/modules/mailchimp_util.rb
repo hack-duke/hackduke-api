@@ -1,7 +1,7 @@
 
 module MailchimpUtil
 
-  def send_password(user)
+  def send_password(user, email)
     temp_password = SecureRandom.hex(8)
     mandrill = Mandrill::API.new Rails.application.secrets.mandrill_key
     message = {
@@ -9,7 +9,7 @@ module MailchimpUtil
      "to"=>
         [{"name"=> user.first_name + ' ' + user.last_name,
             "type"=>"to",
-            "email"=> params[:email]}],
+            "email"=> email}],
      "text"=>"Your temporary password is #{temp_password}. Please log-in and set your new password. This password will expire in 30 minutes.",
      "from_name"=>"HackDuke",
      "subject"=>"Your HackDuke password",

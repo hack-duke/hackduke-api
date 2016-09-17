@@ -106,7 +106,7 @@ class PeopleController < ApplicationController
   def reset_password
     @user = Person.find_by_email(params[:email])
     if @user != nil 
-      send_password(@user)
+      send_password(@user, params[:email])
       render json: {:success => "Temporary password successfully sent!"}
     else
       render json: {:errors => "Your email could not be found!"}
