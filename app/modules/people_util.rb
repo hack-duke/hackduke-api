@@ -1,6 +1,8 @@
 require 'logger'
+require 'mailchimp_util'
 
 module PeopleUtil
+  include MailchimpUtil
 
   # updates a person's information in its role and person model 
   # email is the primary identifier and we must be sure the cleaned version is in the database
@@ -50,16 +52,20 @@ module PeopleUtil
     role = model.joins(:person).where('people.email = ? AND event_id = ?', email, event.id).first
     role_sym = params[:role].parameterize.underscore.to_sym 
     if role == nil
-    # creates new role if the role is not in the database
-    role = model.new(role_params(params[:role], params))
-    role.event = event
-    existing_person = person_exists(email)
+      # creates new role if the role is not in the database
+      role = model.new(role_params(params[:role], params))
+      role.event = event
+      existing_person = person_exists(email)
       if existing_person == nil
         # creates new person if person is not in the database
         person = Person.new(person_params(params))
         person.email = email
         role.person = person
         existing_person = person
+        # sends email with temporary password if it's a participant
+        if params[:role] == 'participant' && !Rails.env.test?
+          send_password(person)
+        end
       else
         # updates the person if the person is in the database
         role.person = existing_person
@@ -124,13 +130,13 @@ module PeopleUtil
     when 0
       return params.require(:participant).permit(:status, :school, :website, :resume, :attending, :github, 
     																				 :portfolio, :graduation_year, :major, :over_eighteen, :slack_id, 
-    																				 :skills => [], :custom => [], :dietary_restrictions => [])
+    																				 :skills => [], :custom => [])
     when 1
       return params.require(:speaker).permit(:slack_id, :date => [], :topic => [])
     when 2
       return params.require(:judge).permit(:slack_id, :skills => [])
     when 3
-      return params.require(:mentor).permit(:slack_id, :skills => [])
+      return params.require(:mentor).permit(:slack_id, :track, :skills => [])
     else 
       return {}
     end
@@ -138,7 +144,7 @@ module PeopleUtil
 
   def person_params(params)
     params = prepare_hash_as_params(params)
-    params.require(:person).permit(:first_name, :gender, :last_name, :email, :phone, :slack_id)
+    params.require(:person).permit(:first_name, :gender, :last_name, :email, :phone, :slack_id, :ethnicity, :dietary_restrictions => [])
   end
 
   def prepare_hash_as_params(params)
