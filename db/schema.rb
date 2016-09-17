@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160916205258) do
+ActiveRecord::Schema.define(version: 20160917030842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,23 +55,22 @@ ActiveRecord::Schema.define(version: 20160916205258) do
     t.integer  "person_id"
     t.integer  "event_id"
     t.integer  "team_id"
-    t.integer  "status",               default: 0
+    t.integer  "status",          default: 0
     t.integer  "graduation_year"
     t.integer  "over_eighteen"
     t.integer  "attending"
     t.string   "major"
     t.string   "school"
-    t.string   "dietary_restrictions", default: [],              array: true
     t.string   "website"
     t.string   "resume"
     t.string   "github"
     t.string   "travel"
     t.string   "portfolio"
-    t.string   "skills",               default: [],              array: true
-    t.string   "custom",               default: [],              array: true
+    t.string   "skills",          default: [],              array: true
+    t.string   "custom",          default: [],              array: true
     t.string   "slack_id"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.string   "track"
     t.index ["event_id"], name: "index_participants_on_event_id", using: :btree
     t.index ["person_id"], name: "index_participants_on_person_id", using: :btree
@@ -93,6 +92,7 @@ ActiveRecord::Schema.define(version: 20160916205258) do
     t.datetime "temp_password_datetime"
     t.string   "session_token"
     t.string   "ethnicity"
+    t.string   "dietary_restrictions",   default: [],              array: true
   end
 
   create_table "projects", force: :cascade do |t|

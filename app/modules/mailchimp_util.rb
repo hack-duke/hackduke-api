@@ -1,6 +1,31 @@
 
 module MailchimpUtil
 
+  def send_password(user)
+    temp_password = SecureRandom.hex(8)
+    mandrill = Mandrill::API.new Rails.application.secrets.mandrill_key
+    message = {
+     "tags"=>["password-resets"],
+     "to"=>
+        [{"name"=> @user.first_name + ' ' + @user.last_name,
+            "type"=>"to",
+            "email"=> params[:email]}],
+     "text"=>"Your temporary password is #{temp_password}. Please log-in and set your new password. This password will expire in 30 minutes.",
+     "from_name"=>"HackDuke",
+     "subject"=>"Your HackDuke password",
+     "merge"=>true,
+     "from_email"=>"register@hackduke.org",
+    }
+    async = false
+    ip_pool = "Main Pool"
+    send_at = DateTime.now.to_s
+    result = mandrill.messages.send message, async, ip_pool, send_at
+    @user.temp_password = Password.create(temp_password)
+    @user.temp_password_datetime = DateTime.now
+    @user.password = nil
+    @user.save!
+  end
+
   def gibbon
   Gibbon::Request.new(api_key: Rails.application.secrets.mailchimp_api_key)
   end

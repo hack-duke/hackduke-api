@@ -10,7 +10,6 @@ class CreateParticipants < ActiveRecord::Migration[5.0]
       t.integer :attending
       t.string :major
       t.string :school
-      t.string :dietary_restrictions, array: true, default: []
       t.string :website
       t.string :resume
       t.string :github
