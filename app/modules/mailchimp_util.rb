@@ -1,3 +1,5 @@
+require 'mandrill'
+require 'bcrypt'
 
 module MailchimpUtil
 
