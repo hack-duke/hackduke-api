@@ -30,13 +30,15 @@ module TypeformWebhook
 
   def create_webhook_info_hash(model, fields, answers)
     hash = {}
-    model.column_names.each do |model_field|
-      result = extract_webhook_result(fields, model_field, answers) 
-      if valid_result(result, model_field)
-        if model.new[model_field] == nil
-          result = result[0]
+    if fields != null
+      model.column_names.each do |model_field|
+        result = extract_webhook_result(fields, model_field, answers) 
+        if valid_result(result, model_field)
+          if model.new[model_field] == nil
+            result = result[0]
+          end
+          hash[model_field.to_sym] = result
         end
-        hash[model_field.to_sym] = result
       end
     end
     hash
