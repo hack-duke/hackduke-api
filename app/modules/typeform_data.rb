@@ -112,8 +112,10 @@ module TypeformData
     result = []
     determine_custom_questions(questions).each do |q|
       answer = response['answers'][q['id']]
-      result << q['question']
-      result << answer
+      if answer != '' && answer != nil
+        result << q['question']
+        result << answer
+      end
     end
     result
   end

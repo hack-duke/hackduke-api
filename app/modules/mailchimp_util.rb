@@ -16,7 +16,7 @@ module MailchimpUtil
      "from_name"=>"HackDuke",
      "subject"=>"Your HackDuke password",
      "merge"=>true,
-     "from_email"=>"register@hackduke.org",
+     "from_email"=>"hackers@hackduke.org",
     }
     async = false
     ip_pool = "Main Pool"

@@ -30,7 +30,7 @@ describe 'Database Synchronization' do
       all_responses = generate_all_responses
       populate_database(all_responses, 2, 1)
       database_tester = DatabaseTester.new
-      active_events = Event.all.where(active: 1)
+      active_events = Event.where(active: 1)
 
       puts 'Generating person hash...'
       person_hash = database_tester.generate_person_hash(active_events)
