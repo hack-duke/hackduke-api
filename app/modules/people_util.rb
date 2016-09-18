@@ -53,9 +53,6 @@ module PeopleUtil
     role_sym = params[:role].parameterize.underscore.to_sym 
     if role == nil
       # creates new role if the role is not in the database
-      if params[:role] == 'participant' && !Rails.env.test?
-        send_password(person, email)
-      end
       role = model.new(role_params(params[:role], params))
       role.event = event
       existing_person = person_exists(email)
@@ -71,6 +68,9 @@ module PeopleUtil
         role.person = existing_person
         role.person.update_attributes(person_params(params))
         role.person.email = email
+      end
+      if params[:role] == 'participant' && !Rails.env.test?
+        send_password(existing_person, email)
       end
       append_to_submission_history(role, params)
       # save person and role
