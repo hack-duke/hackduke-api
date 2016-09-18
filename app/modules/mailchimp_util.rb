@@ -26,6 +26,7 @@ module MailchimpUtil
     user.temp_password_datetime = DateTime.now
     user.password = nil
     user.save!
+    user
   end
 
   def gibbon
