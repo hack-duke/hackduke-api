@@ -129,7 +129,7 @@ module PeopleUtil
     case Person.roles[role]
     when 0
       return params.require(:participant).permit(:status, :school, :website, :resume, :attending, :github, 
-    																				 :portfolio, :graduation_year, :major, :over_eighteen, :slack_id, 
+    																				 :portfolio, :graduation_year, :major, :over_eighteen, :slack_id, :track, 
     																				 :skills => [], :custom => [])
     when 1
       return params.require(:speaker).permit(:slack_id, :date => [], :topic => [])
