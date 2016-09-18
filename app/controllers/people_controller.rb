@@ -43,11 +43,14 @@ class PeopleController < ApplicationController
   end
 
   def authenticate
-    @user = Person.find_by_email(params[:email])
+    semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
+    event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
+    participant = Participant.joins(:person).where('people.email = ? AND event_id = ?', params[:email], event.id).first
     permanent_pass_correct = false
     temporary_pass_correct = false
     temporary_pass_expired = true
-    if @user != nil
+    if participant != nil
+      @user = participant.person
       if @user.session_token == params[:session_token]
         session_token = SecureRandom.hex
         @user.session_token = session_token
@@ -88,8 +91,11 @@ class PeopleController < ApplicationController
   end
 
   def set_password
-    @user = Person.find_by_email(params[:email])
-    if @user != nil
+    semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
+    event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
+    participant = Participant.joins(:person).where('people.email = ? AND event_id = ?', params[:email], event.id).first
+    if participant != nil
+      @user = participant.person
       session_token = SecureRandom.hex
       @user.session_token = session_token
       @user.password = Password.create(params[:password])
@@ -103,8 +109,11 @@ class PeopleController < ApplicationController
   end
 
   def reset_password
-    @user = Person.find_by_email(params[:email])
-    if @user != nil 
+    semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
+    event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
+    participant = Participant.joins(:person).where('people.email = ? AND event_id = ?', params[:email], event.id).first
+    if participant != nil 
+      @user = participant.person
       send_password(@user, params[:email])
       render json: {:success => "Temporary password successfully sent!"}
     else
