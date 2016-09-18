@@ -106,7 +106,7 @@ module TypeformWebhook
   def determine_webhook_regular(fields, model_field, answers)
     result = []
     fields.each do |f|
-      if correct_webhook_field(model_field, f)
+      if correct_webhook_field(model_field, f) && !f['title'].include?('Q:')
         result = get_answer_by_id(answers, f['id'])
       end
     end
