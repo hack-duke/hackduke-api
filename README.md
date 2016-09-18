@@ -34,8 +34,10 @@ or there have been invalid emails added (you can filter them out in the Mailchim
 the test to pass again)
 
 ##Services
-- Typeform: bundle exec rake resque:typeform
 - Mailchimp: bundle exec rake resque:mailchimp
+- The services below are currently not ready to be used in production because they will send mass welcome emails
+- Mailchimp synchronization can be performed manually on Heroku whenever needed
+- Typeform: bundle exec rake resque:typeform
 - Crons (typeform, mailchimp): bundle exec rake resque:scheduler (see scheduler at config/schedule.yml)
 - Run bundle exec rake resque:work QUEUE=high and redis-server before the scheduler is started
 
