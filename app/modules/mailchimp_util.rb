@@ -24,6 +24,9 @@ module MailchimpUtil
     result = mandrill.messages.send message, async, ip_pool, send_at
     user.temp_password = Password.create(temp_password)
     user.temp_password_datetime = DateTime.now
+    session_token = SecureRandom.hex
+    user.session_token = session_token
+    user.save!
     user.password = nil
     user.save!
     user
