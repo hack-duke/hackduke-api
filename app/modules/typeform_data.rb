@@ -14,7 +14,6 @@ module TypeformData
     Event.where(active: 1).each do |event| 
       event.form_ids.each_with_index do |form_id, index|
         form_object = ActiveSupport::JSON.decode(HTTParty.get(data_api_url(form_id)).body)
-        # see the README for an explanation of typeform routes
         route = get_data_route(form_object['questions'])
         if route == ''
           no_route_error(form_id)

@@ -3,7 +3,7 @@
 
 ##Overview
 This API serves to facilitate registration for all HackDuke events through typeform. The use of typeform allows
-the quick creation of forms for any event given that the questions have a corresponding field in the database. See Typeform instructions for a full list of supported questions/attributes. 
+the quick creation of forms for any event given that the questions have a corresponding field in the database. See the hackduke-typeform repo for comprehensive instructions for how typeforms should be created.
 
 ##Project Structure
 - app/controllers/people_controller.rb and its modules contains most of the logic to receive webhooks/posts to modify/add people to the database
@@ -45,46 +45,3 @@ the test to pass again)
 
 ##Continous integration
 - currently using travis CI to run the tests on every build and deploy to heroku on merges to master
-
-##Typeform instructions
-- All typeforms must be given a route with the following format route_(update/receive)_(participant/judge/speaker/mentor) (e.g. route_receive_participant would be the route for new participant registration)
-- receive or update refers to whether you are creating a new person or simply updating one
-- for update forms + mailchimp, use mailchimp merge tags to fill in the email hidden field so that people can be identified automatically
-- the participant/judge/speaker/mentor refers to the role the person will play in an event
-- the following roles are currently supported
-	* participant
-	* judge
-	* speaker
-	* mentor
-- routes should be placed as a hidden field key in the typeform
-- the questions for the forms must contain keywords, which are the model fields (e.g. what is your first name would be a good question for first_name, see the the Ideate Registration typeform for more examples)
-- for all roles, you can include the following keywords/questions
-	* email (this field is mandatory)
-	* first name
-	* last name
-	* gender
-	* ethnicity
-	* phone
-- for participants, the following are currently supported: 
-  * graduation year
-  * over eighteen
-  * attending (used for confirmation)
-  * major
-  * school
-  * dietary restrictions
-  * website 
-  * resume
-  * github
-  * travel (used for reimbursements)
-  * portfolio
-  * skills
-  * track
-- for mentors, 
-	* skills
-	* track
-- for speakers, 
-	* topic
-	* date
-- for judges, 
-	* skills
-- lastly, custom questions must be prefixed with Q: (e.g. Q: Why do you want to attend HackDuke?)
