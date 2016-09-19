@@ -70,7 +70,12 @@ module PeopleUtil
       end
       # sends email with temporary password if it's a participant
       if params[:role] == 'participant' && !Rails.env.test?
-        send_password(existing_person, email)
+        send_password(existing_person, email) #lookhere
+        #welcome email/thank you for registering
+        #normal password reset
+        #add new parameter to method
+        #welcome email or normal email
+        
       end
       append_to_submission_history(role, params)
       # save person and role
