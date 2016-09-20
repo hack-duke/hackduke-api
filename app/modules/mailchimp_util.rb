@@ -3,7 +3,7 @@ require 'mandrill'
 module MailchimpUtil
   include BCrypt
 
-  def send_password(user, email)
+  def send_password(user, email, first_time)
     temp_password = SecureRandom.hex(8)
     mandrill = Mandrill::API.new Rails.application.secrets.mandrill_key
     message = {
@@ -16,17 +16,28 @@ module MailchimpUtil
      "subject"=>"Your HackDuke password",
      "merge"=>true,
      "from_email"=>"hackers@hackduke.org",
-     "global_merge_vars": [{
+     "global_merge_vars": [
+        {
           "name": "PASSWORD",
           "content": temp_password,
-          "name": "COMPANY",
+        },
+        {
+          "name": "LIST:COMPANY",
           "content": "HackDuke",
-          # "name": "HTML:LIST_ADDRESS_HTML",
-          # "content": "hackers@hackduke.org",
-      }],
+        },
+        {
+          "name": "HTML:LIST_ADDRESS_HTML",
+          "content": "hackers@hackduke.org",
+        }
+      ],
     }
-    template_name = "Temporary Password"
-    template_content = [{}]
+    if first_time == true
+      template_name = "Temporary Password"
+      template_content = [{}]
+    else
+      template_name = "Temporary Password RESET"
+      template_content = [{}]
+    end
 
     async = false
     ip_pool = "Main Pool"

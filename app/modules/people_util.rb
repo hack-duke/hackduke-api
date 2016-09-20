@@ -68,9 +68,10 @@ module PeopleUtil
         role.person.update_attributes(person_params(params))
         role.person.email = email
       end
+
       # sends email with temporary password if it's a participant
       if params[:role] == 'participant' && !Rails.env.test?
-        send_password(existing_person, email) #lookhere
+        send_password(existing_person, email, true) #lookhere
         #welcome email/thank you for registering
         #normal password reset
         #add new parameter to method
