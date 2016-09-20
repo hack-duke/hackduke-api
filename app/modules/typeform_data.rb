@@ -99,7 +99,7 @@ module TypeformData
   def determine_regular(response, field, questions)
     result = []
     questions.each do |q|
-      if correct_question(field, q)
+      if correct_question(field, q) && !q['question'].include?('Q:')
         answer = response['answers'][q['id']]
         result << answer unless answer == ''
       end
