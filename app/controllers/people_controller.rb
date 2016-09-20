@@ -114,7 +114,7 @@ class PeopleController < ApplicationController
     participant = Participant.joins(:person).where('people.email = ? AND event_id = ?', params[:email], event.id).first
     if participant != nil 
       @user = participant.person
-      send_password(@user, params[:email])
+      send_password(@user, params[:email], false)
       render json: {:success => "Temporary password successfully sent!"}
     else
       render json: {:errors => "Your email could not be found!"}

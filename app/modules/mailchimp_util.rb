@@ -3,7 +3,7 @@ require 'mandrill'
 module MailchimpUtil
   include BCrypt
 
-  def send_password(user, email)
+  def send_password(user, email, first_time)
     temp_password = SecureRandom.hex(8)
     mandrill = Mandrill::API.new Rails.application.secrets.mandrill_key
     message = {
@@ -12,16 +12,37 @@ module MailchimpUtil
         [{"name"=> user.first_name + ' ' + user.last_name,
             "type"=>"to",
             "email"=> email}],
-     "text"=>"Your temporary password is #{temp_password}. Please log-in and set your new password. This password will expire in 30 minutes.",
      "from_name"=>"HackDuke",
      "subject"=>"Your HackDuke password",
      "merge"=>true,
      "from_email"=>"hackers@hackduke.org",
+     "global_merge_vars": [
+        {
+          "name": "PASSWORD",
+          "content": temp_password,
+        },
+        {
+          "name": "LIST:COMPANY",
+          "content": "HackDuke",
+        },
+        {
+          "name": "HTML:LIST_ADDRESS_HTML",
+          "content": "hackers@hackduke.org",
+        }
+      ],
     }
+    if first_time
+      template_name = "CodeForGoodReset2016"
+      template_content = [{}]
+    else
+      template_name = "CodeForGoodWelcome2016"
+      template_content = [{}]
+    end
+
     async = false
     ip_pool = "Main Pool"
     send_at = DateTime.now.to_s
-    result = mandrill.messages.send message, async, ip_pool, send_at
+    template_result = mandrill.messages.send_template template_name, template_content, message, async, ip_pool, send_at
     user.temp_password = Password.create(temp_password)
     user.temp_password_datetime = DateTime.now
     session_token = SecureRandom.hex
@@ -47,7 +68,7 @@ module MailchimpUtil
     Person.roles.keys.each_with_index do |role, index|
       if index == 0 
         event.mailchimp_ids[index].split(',').each do |mid|
-        	emails << retrieve_all_members(mid)
+          emails << retrieve_all_members(mid)
         end
       else
         emails << retrieve_all_members(event.mailchimp_ids[index])
