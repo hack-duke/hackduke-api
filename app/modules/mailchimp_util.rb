@@ -3,7 +3,7 @@ require 'mandrill'
 module MailchimpUtil
   include BCrypt
 
-  def send_password(user, email) #add extra parameter here to see whether first/welcome email or not
+  def send_password(user, email)
     temp_password = SecureRandom.hex(8)
     mandrill = Mandrill::API.new Rails.application.secrets.mandrill_key
     message = {
@@ -17,20 +17,29 @@ module MailchimpUtil
      "merge"=>true,
      "from_email"=>"hackers@hackduke.org",
      "global_merge_vars": [{
-      "name": "PASSWORD",
-      "content": temp_password,
+          "name": "PASSWORD",
+          "content": temp_password,
+          "name": "COMPANY",
+          "content": "HackDuke",
+          # "name": "HTML:LIST_ADDRESS_HTML",
+          # "content": "hackers@hackduke.org",
       }],
     }
     template_name = "Temporary Password"
     template_content = [{}]
+
     async = false
     ip_pool = "Main Pool"
     send_at = DateTime.now.to_s
     template_result = mandrill.messages.send_template template_name, template_content, message, async, ip_pool, send_at
     user.temp_password = Password.create(temp_password)
     user.temp_password_datetime = DateTime.now
+    session_token = SecureRandom.hex
+    user.session_token = session_token
+    user.save!
     user.password = nil
     user.save!
+    user
   end
 
   def gibbon
@@ -48,7 +57,7 @@ module MailchimpUtil
     Person.roles.keys.each_with_index do |role, index|
       if index == 0 
         event.mailchimp_ids[index].split(',').each do |mid|
-        	emails << retrieve_all_members(mid)
+          emails << retrieve_all_members(mid)
         end
       else
         emails << retrieve_all_members(event.mailchimp_ids[index])
