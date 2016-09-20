@@ -68,10 +68,12 @@ module PeopleUtil
         role.person.update_attributes(person_params(params))
         role.person.email = email
       end
+
       # sends email with temporary password if it's a participant
       if params[:role] == 'participant' && !Rails.env.test?
-        role.person = send_password(existing_person, email)
+        role.person = send_password(existing_person, email, true) 
       end
+      
       append_to_submission_history(role, params)
       # save person and role
       role.person.save!
