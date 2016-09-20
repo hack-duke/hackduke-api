@@ -5,6 +5,17 @@ module MailchimpUtil
 
   def send_password(user, email, first_time)
     temp_password = SecureRandom.hex(8)
+
+    if first_time
+      template_name = "CodeForGoodWelcome2016"
+      template_content = [{}]
+      subject = 'Thanks for registering!'
+    else
+      template_name = "CodeForGoodReset2016"
+      template_content = [{}]
+      subject = 'Your HackDuke password'
+    end
+
     mandrill = Mandrill::API.new Rails.application.secrets.mandrill_key
     message = {
      "tags"=>["password-resets"],
@@ -13,7 +24,7 @@ module MailchimpUtil
             "type"=>"to",
             "email"=> email}],
      "from_name"=>"HackDuke",
-     "subject"=>"Your HackDuke password",
+     "subject"=>subject,
      "merge"=>true,
      "from_email"=>"hackers@hackduke.org",
      "global_merge_vars": [
@@ -31,14 +42,6 @@ module MailchimpUtil
         }
       ],
     }
-
-    if first_time == true
-      template_name = "CodeForGoodWelcome2016"
-      template_content = [{}]
-    else
-      template_name = "CodeForGoodReset2016"
-      template_content = [{}]
-    end
 
     async = false
     ip_pool = "Main Pool"
