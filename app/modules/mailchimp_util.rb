@@ -31,6 +31,7 @@ module MailchimpUtil
         }
       ],
     }
+
     if first_time == true
       template_name = "CodeForGoodWelcome2016"
       template_content = [{}]

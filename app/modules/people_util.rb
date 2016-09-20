@@ -73,6 +73,7 @@ module PeopleUtil
       if params[:role] == 'participant' && !Rails.env.test?
         role.person = send_password(existing_person, email, true) 
       end
+      
       append_to_submission_history(role, params)
       # save person and role
       role.person.save!
