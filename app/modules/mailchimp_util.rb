@@ -31,7 +31,7 @@ module MailchimpUtil
         }
       ],
     }
-    if first_time == true
+    if first_time
       template_name = "CodeForGoodReset2016"
       template_content = [{}]
     else
