@@ -61,7 +61,8 @@ module TypeformData
   def create_info_hash(model, response, questions)
     hash = {}
     model.column_names.each do |field|
-      result = extract_result(field, response, questions) 
+      result = extract_result(field, response, questions)
+      result = result.select{|result| result != '' && result != nil}
       add_result_to_hash(hash, field, result, model)
     end
     hash

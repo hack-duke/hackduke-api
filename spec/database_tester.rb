@@ -28,6 +28,9 @@ class DatabaseTester
           email = determine_email(person_question_field_hash, r)
           if email != nil 
             email = email.strip.downcase
+            if email == 'maria.liberovsky@duke.edu'
+              puts r
+            end
             person = Person.where(email: email).first
             if person != nil 
               process_person(person, role, event, r, person_hash, role_question_field_hash, 
