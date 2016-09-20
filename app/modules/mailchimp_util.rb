@@ -31,11 +31,12 @@ module MailchimpUtil
         }
       ],
     }
-    if first_time
-      template_name = "CodeForGoodReset2016"
+
+    if first_time == true
+      template_name = "CodeForGoodWelcome2016"
       template_content = [{}]
     else
-      template_name = "CodeForGoodWelcome2016"
+      template_name = "CodeForGoodReset2016"
       template_content = [{}]
     end
 
