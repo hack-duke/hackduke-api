@@ -35,7 +35,11 @@ module PeopleUtil
       if push 
         trigger_push
       end
-      render json: {:person => role.person, role_sym(params[:role]) => role}
+      begin
+        render json: {:person => person, role_sym(params[:role]) => role}
+      rescue
+        render json: {:errors => 'Person and role could not be converted to JSON'}
+      end
     else
       render json: {:errors => 'That role does not exist'}
     end
@@ -85,7 +89,11 @@ module PeopleUtil
       if push 
         trigger_push
       end
-      render json: {:person => person, role_sym(params[:role]) => role}
+      begin
+        render json: {:person => person, role_sym(params[:role]) => role}
+      rescue
+        render json: {:errors => 'Person and role could not be converted to JSON'}
+      end
     else
     # updates the role if the role is in the database
     update_role_logic(params, push)

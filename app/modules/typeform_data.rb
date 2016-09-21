@@ -102,6 +102,9 @@ module TypeformData
     questions.each do |q|
       if correct_question(field, q) && !q['question'].include?('Q:')
         answer = response['answers'][q['id']]
+        if answer != nil 
+          answer.force_encoding('UTF-8')
+        end
         result << answer unless answer == ''
       end
     end
@@ -113,6 +116,7 @@ module TypeformData
     determine_custom_questions(questions).each do |q|
       answer = response['answers'][q['id']]
       if answer != '' && answer != nil
+        answer.force_encoding('UTF-8')
         result << q['question']
         result << answer
       end
