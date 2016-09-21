@@ -39,7 +39,7 @@ class PeopleController < ApplicationController
   def id
     role_type = params[:role]
     model = role_type.classify.constantize
-    render json: model.find(params[:id])
+    render json: {'role': model.find(params[:id])}
   end
 
   def authenticate
@@ -66,7 +66,7 @@ class PeopleController < ApplicationController
         temporary_pass_correct = unencrypted_temp_password == params[:password]
         if @user.temp_password_datetime != nil
           temp_password_datetime = DateTime.parse(@user.temp_password_datetime.to_s)
-          temporary_pass_expired = ((DateTime.now - temp_password_datetime)*24*60).to_i > 30
+          temporary_pass_expired = ((DateTime.now - temp_password_datetime)*24*60).to_i > 60
         end
       else
         render json: {:errors => "Please request a temporary password first!"}
@@ -126,7 +126,7 @@ class PeopleController < ApplicationController
     model = role_type.classify.constantize
     role = model.find(params[:id])
     role.update_attributes(role_params(params[:role], params))
-    render json: role
+    render json: {'role': role}
   end
   
   # push means the request came from a webhook and the client should be updated automatically
@@ -171,8 +171,8 @@ class PeopleController < ApplicationController
       }
     end
     output = roles.group_by{|x| x[:person_id]}.map{|k,v| 
-      { :person => Person.find(k).attributes.slice('first_name', 'last_name', 'phone', 'email', 'gender', 'ethnicity'),
-      :roles => v.map{|ele| { role_with_status(ele[:role], ele[:role_type]) => ele[:role] } }
+      { :person => Person.find(k).attributes.slice('first_name', 'last_name', 'phone', 'email', 'gender', 'ethnicity', 'dietary_restrictions'),
+        :roles => v.map{|ele| { role_with_status(ele[:role], ele[:role_type]) => ele[:role] } }
       }
     }
     render json: output.sort_by {|v| v[:person]['first_name'].downcase}

@@ -28,9 +28,6 @@ class DatabaseTester
           email = determine_email(person_question_field_hash, r)
           if email != nil 
             email = email.strip.downcase
-            if email == 'maria.liberovsky@duke.edu'
-              puts r
-            end
             person = Person.where(email: email).first
             if person != nil 
               process_person(person, role, event, r, person_hash, role_question_field_hash, 
@@ -200,6 +197,16 @@ class DatabaseTester
       database_attribute_array = map_attribute_array_if_datetime(database_attribute_array, attribute, model)
     end
     arrays.last.each do |attribute_value|
+      # if an attribute that requires an integer does not get one from typeform, automatically pass this attribute
+      if model.columns_hash[attribute].type == :integer
+        if attribute_value.is_a?(Array)
+          attribute_value.each do |value|
+            next unless value.is_a?(Integer)
+          end
+        else
+          next unless attribute_value.is_a?(Integer)
+        end
+      end
       if !database_attribute_array.include? attribute_value
         print_attribute_info(person, attribute, database_attribute_array, arrays, role)
         return false

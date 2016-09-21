@@ -55,8 +55,8 @@ module TypeformWebhook
         answers << answer[type].values[0]
       when 'choices'
         answer[type].each do |key, value|
-        answers << value unless value == nil
-      end
+          answers << value unless value == nil
+        end
       when 'boolean'
         bool = answer[type] == true ? 1 : 0
         answers << bool
