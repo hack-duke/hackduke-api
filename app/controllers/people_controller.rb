@@ -171,8 +171,10 @@ class PeopleController < ApplicationController
       }
     end
     output = roles.group_by{|x| x[:person_id]}.map{|k,v| 
-      { :person => Person.find(k).attributes.slice('first_name', 'last_name', 'phone', 'email', 'gender', 'ethnicity'),
-      :roles => v.map{|ele| { role_with_status(ele[:role], ele[:role_type]) => ele[:role] } }
+      puts k
+      puts v
+      { :person => Person.find(k).attributes.slice('first_name', 'last_name', 'phone', 'email', 'gender', 'ethnicity', 'dietary_restrictions'),
+        :roles => v.map{|ele| { role_with_status(ele[:role], ele[:role_type]) => ele[:role] } }
       }
     }
     render json: output.sort_by {|v| v[:person]['first_name'].downcase}

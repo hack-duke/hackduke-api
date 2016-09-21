@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     collection do
       post :semester
       get :mailchimp
+      get :current
     end
   end
 
