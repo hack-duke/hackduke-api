@@ -34,7 +34,7 @@ module TypeformWebhook
       model.column_names.each do |model_field|
         result = extract_webhook_result(model, model_field, answers) 
         if valid_result(result, model_field)
-          result = handle_results_array_by_field(model_field, field, result)
+          result = handle_results_array_by_field(model, model_field, result)
           hash[model_field.to_sym] = result
         end
       end
