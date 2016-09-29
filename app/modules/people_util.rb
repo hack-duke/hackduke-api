@@ -147,6 +147,10 @@ module PeopleUtil
       return params.require(:judge).permit(:slack_id, :skills => [])
     when 3
       return params.require(:mentor).permit(:slack_id, :track, :skills => [])
+    when 4
+      return params.require(:volunteer).permit(:slack_id, :hours, :size, :times => [], :custom => [])
+    when 5
+      return params.require(:organizer).permit(:slack_id)
     else 
       return {}
     end
