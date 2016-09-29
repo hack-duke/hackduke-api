@@ -34,7 +34,10 @@ module TypeformWebhook
       model.column_names.each do |model_field|
         result = extract_webhook_result(fields, model_field, answers) 
         if valid_result(result, model_field)
-          if model.new[model_field] == nil
+          # detect whether the result should be an array or not
+          # if the default value is nil, 0 (for integer), or '' (for string) 
+          # then it should only be the first element of the result array
+          if model.new[model_field] == nil || model.new[model_field] == 0 || model.new[model_field] == ''
             result = result[0]
           end
           hash[model_field.to_sym] = result
