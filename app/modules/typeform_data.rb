@@ -70,10 +70,11 @@ module TypeformData
 
   def add_result_to_hash(hash, field, result, model)
     if valid_result(result, field)
-      # determines whether the field is an array
-      # if the new field is nil, the field is not an array
-      # otherwise it would be []
-      if model.new[field] == nil
+     # detect whether the result should be an array or not
+      # if the default value is nil, 0 (for integer), or '' (for string) 
+      # then it should only be the first element of the result array
+      # also occurs in typeform_webhook as well
+      if model.new[model_field] == nil || model.new[model_field] == 0 || model.new[model_field] == ''
         result = result[0]
       end
       # logic to make sure we don't get nils in our arrays
