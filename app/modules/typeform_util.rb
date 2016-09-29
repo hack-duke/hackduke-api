@@ -17,6 +17,16 @@ module TypeformUtil
     route
   end
 
+  # detect whether the result should be an array or not
+  # if the default value is nil, 0 (for integer), or '' (for string) 
+  # then it should only be the first element of the result array
+  def handle_results_array_by_field(model, field, result)
+    if model.new[field] == nil || model.new[field] == 0 || model.new[field] == ''
+      result = result[0]
+    end
+    result
+  end
+
   def get_data_route(questions)
     route = ''
     questions.each do |question|

@@ -36,7 +36,7 @@ module PeopleUtil
         trigger_push
       end
       begin
-        render json: {:person => person, role_sym(params[:role]) => role}
+        render json: {:person => role.person, role_sym(params[:role]) => role}
       rescue
         render json: {:errors => 'Person and role could not be converted to JSON'}
       end

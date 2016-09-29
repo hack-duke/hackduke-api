@@ -126,7 +126,7 @@ module MailchimpUtil
     name = "#{event.event_type.humanize.titleize} #{event.semester.season.capitalize} #{event.semester.year} #{role.capitalize}s #{modifier.capitalize}"
     { body: {name: name, contact: { company: 'HackDuke', address1: '450 Research Dr',
      city: 'Durham', state: 'North Carolina', zip: '27705', country: 'US',
-     phone: '(703) 662-1293' }, permission_reminder: 'You registered for this event',
+     phone: '(703) 662-1293' }, permission_reminder: 'You\'re interested in HackDuke',
      campaign_defaults: { from_name: from_name, from_email: from_email,
      subject: name, language: 'English'}, email_type_option: true} }
   end
