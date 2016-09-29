@@ -89,7 +89,6 @@ module PeopleUtil
       if push 
         trigger_push
       end
-      puts role
       begin
         render json: {:person => person, role_sym(params[:role]) => role}
       rescue
