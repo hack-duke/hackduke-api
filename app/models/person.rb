@@ -4,6 +4,8 @@ class Person < ApplicationRecord
   has_many :speaker
   has_many :judge
   has_many :mentor
-  enum roles: [:participant, :speaker, :judge, :mentor]
+  has_many :volunteer
+  has_many :organizer
+  enum roles: [:participant, :speaker, :judge, :mentor, :volunteer, :organizer]
 
 end

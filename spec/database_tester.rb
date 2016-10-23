@@ -65,17 +65,19 @@ class DatabaseTester
           if role_object == nil
             puts "The role #{role} for #{email} should exist"
           end
-        attribute_value = value
-        attribute = role_field_hash[key]
-      elsif person_field_hash.key? key
-        attribute_value = value
-        attribute = person_field_hash[key]
-      end
-      if key.include? 'date'
-        attribute_value = DateTime.parse(attribute_value)
-      end
-      # adds attribute to the temp_person_hash and keeps accumulating
-      add_to_temp_person_hash(temp_person_hash, attribute, attribute_value)
+          attribute_value = value
+          attribute = role_field_hash[key]
+        elsif person_field_hash.key? key
+          attribute_value = value
+          attribute = person_field_hash[key]
+        end
+        if key.include? 'date'
+          attribute_value = DateTime.parse(attribute_value)
+        end
+        # adds attribute to the temp_person_hash and keeps accumulating
+        if attribute != '' && attribute_value != ''
+          add_to_temp_person_hash(temp_person_hash, attribute, attribute_value)
+        end
       end
     end
     # adds temp_person_hash to global hash by concatenating answers as an array
@@ -100,7 +102,7 @@ class DatabaseTester
   end
 
   # add to the person_hash, with the primary key being the email,
-  # the secondary key being the role + attribute (unless it's an update to the Person model)
+  # the secondary key being the role + attribute + event id (unless it's an update to the Person model)
   def add_to_person_hash(person_hash, answers_array, email, role, attribute, event)
   # currently emails cannot be modified through typeform and are ignored
     if attribute == "email"
@@ -141,7 +143,7 @@ class DatabaseTester
     !truth_array.include? false
   end	
 
-  # validates if the submissino history is the same on the database and typeform
+  # validates if the submission history is the same on the database and typeform
   def validate_submission_form_arrays(person_hash, person, attribute_key)
     valid_arrays = true
     typeform_array = person_hash[person.email][attribute_key]

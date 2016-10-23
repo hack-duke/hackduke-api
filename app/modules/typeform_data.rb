@@ -70,12 +70,7 @@ module TypeformData
 
   def add_result_to_hash(hash, field, result, model)
     if valid_result(result, field)
-      # determines whether the field is an array
-      # if the new field is nil, the field is not an array
-      # otherwise it would be []
-      if model.new[field] == nil
-        result = result[0]
-      end
+      result = handle_results_array_by_field(model, field, result)
       # logic to make sure we don't get nils in our arrays
       if result != nil
         if result.kind_of? Array

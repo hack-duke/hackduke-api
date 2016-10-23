@@ -36,7 +36,7 @@ module PeopleUtil
         trigger_push
       end
       begin
-        render json: {:person => person, role_sym(params[:role]) => role}
+        render json: {:person => role.person, role_sym(params[:role]) => role}
       rescue
         render json: {:errors => 'Person and role could not be converted to JSON'}
       end
@@ -147,6 +147,10 @@ module PeopleUtil
       return params.require(:judge).permit(:slack_id, :skills => [])
     when 3
       return params.require(:mentor).permit(:slack_id, :track, :skills => [])
+    when 4
+      return params.require(:volunteer).permit(:slack_id, :hours, :size, :times => [], :custom => [])
+    when 5
+      return params.require(:organizer).permit(:slack_id)
     else 
       return {}
     end

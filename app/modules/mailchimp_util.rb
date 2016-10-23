@@ -93,10 +93,11 @@ module MailchimpUtil
     end
   end
 
-  # def add_to_mailchimp_list_based_on_parameters(school, season, year, event)
+  def create_school_list_mailchimp(school, event, name, email)
   #   gibbon = Gibbon::Request.new(api_key: Rails.application.secrets.mailchimp_api_key)
   #   begin 
 
+  #  same as everywhere else. pass in event
   #     #find the event
   #     #make list using that event
   #     #name the list based on the school you got
@@ -112,7 +113,10 @@ module MailchimpUtil
   #     #participant.where(event_id==event_id_specified && school == Duke)
 
   #     #Participant.where('people.email = ? AND event_id = ?', params[:email], event.id)
-  #     #Participant.where('event_id = ? AND school = ?', event.id, 'Duke University')
+      all_participants = Participant.where('event_id = ? AND school = ?', event.id, school)
+
+
+
   #     #filter based on school. 
 
   #     # semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
@@ -138,8 +142,19 @@ module MailchimpUtil
 
   #   rescue Gibbon::MailChimpError => e
   #     Rails.logger.debug e.raw_body
+
+  response = gibbon.lists.create(make_mailchimp_hash(name, email, event, "participant", school))
+  #loop through all participants
+  all_participants.each { |participant|  add_to_mailchimp_list(event, participant.person, participant.person.email, response['id'])}
+
+
+  
+
+  #role = participant
+  #modifier = school
+
   #   end
-  # end
+  end
 
   def delete_mailchimp_lists(event)
     event.mailchimp_ids.each do |id|
@@ -172,10 +187,10 @@ module MailchimpUtil
   end
 
   def make_mailchimp_hash(from_name, from_email, event, role, modifier='')
-    name = "#{event.event_type.humanize.titleize} #{event.semester.season.capitalize} #{event.semester.year} #{role.capitalize}s #{modifier.capitalize}"
+    name = "#{event.event_type.humanize.titleize} #{event.semester.season.capitalize} #{event.semester.year} #{role.capitalize}s #{modifier.titleize}"
     { body: {name: name, contact: { company: 'HackDuke', address1: '450 Research Dr',
      city: 'Durham', state: 'North Carolina', zip: '27705', country: 'US',
-     phone: '(703) 662-1293' }, permission_reminder: 'You registered for this event',
+     phone: '(703) 662-1293' }, permission_reminder: 'You\'re interested in HackDuke',
      campaign_defaults: { from_name: from_name, from_email: from_email,
      subject: name, language: 'English'}, email_type_option: true} }
   end
