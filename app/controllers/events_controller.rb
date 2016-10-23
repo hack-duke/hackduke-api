@@ -10,6 +10,13 @@ class EventsController < ApplicationController
     @event = Event.find(params[:id])
   end
 
+  def create_school_list
+    semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
+    event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
+    params[:school]
+    render json: "Hi"
+  end
+
   # creates a new event and makes a new mailchimp list for that event
   def create
     @event = Event.new(event_params)

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   resources :events do
     collection do
+      post :create_school_list
       post :semester
       get :mailchimp
       get :current

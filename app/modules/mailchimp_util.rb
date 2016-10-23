@@ -81,6 +81,7 @@ module MailchimpUtil
   emails
   end
 
+  #adds one person
   def add_to_mailchimp_list(event, person, cleaned_email, mailchimp_id)
     gibbon = Gibbon::Request.new(api_key: Rails.application.secrets.mailchimp_api_key)
     begin 
@@ -91,6 +92,54 @@ module MailchimpUtil
       Rails.logger.debug e.raw_body
     end
   end
+
+  # def add_to_mailchimp_list_based_on_parameters(school, season, year, event)
+  #   gibbon = Gibbon::Request.new(api_key: Rails.application.secrets.mailchimp_api_key)
+  #   begin 
+
+  #     #find the event
+  #     #make list using that event
+  #     #name the list based on the school you got
+  #     #query loop through them and call add_to
+  #     #use hte Id you get from that to add  hte particiapnts
+
+  #     #cleaned_email
+  #     #get the person's email
+  #     #person.email
+  #     #pass in mailchimp_id from making the list
+  #       #response['id']
+  #       #response['id'] mailchimp_id
+  #     #participant.where(event_id==event_id_specified && school == Duke)
+
+  #     #Participant.where('people.email = ? AND event_id = ?', params[:email], event.id)
+  #     #Participant.where('event_id = ? AND school = ?', event.id, 'Duke University')
+  #     #filter based on school. 
+
+  #     # semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
+  #     # event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
+
+  #     #hardcode the school, 
+  #     #participant and school
+  #     #participant is role
+
+
+  #     # event.sends("participants")   
+  #     # to get all people
+  #     # loop through participants
+  #     # participants.person
+  #     # first name, last name, email from people then add to mailchimp list
+  #     # to get event, find semester then find eventtype
+
+  #     #how do i test this
+
+  #     puts gibbon.lists(mailchimp_id).members.create(
+  #     body: {email_address: cleaned_email, status: 'subscribed', merge_fields:
+  #     {FNAME: person.first_name, LNAME: person.last_name}})
+
+  #   rescue Gibbon::MailChimpError => e
+  #     Rails.logger.debug e.raw_body
+  #   end
+  # end
 
   def delete_mailchimp_lists(event)
     event.mailchimp_ids.each do |id|
