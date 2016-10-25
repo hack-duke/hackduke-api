@@ -8,6 +8,16 @@ class PeopleController < ApplicationController
   include TypeformUtil
   include EventsUtil
 
+  def query_by_key_value
+    model = params[:role].classify.constantize
+    result = model.where("#{params[:key]} = ?", params[:value]).first
+    if params[:role] == 'person'
+      render json: result
+    else
+      render json: {:person => result.person, :role => result}
+    end
+  end
+
   def ids
     semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
     event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first

@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
   resources :people do
     collection do
+      post :query_by_key_value
       post :receive_role_push
       post :update_role_push
       post :receive_role
