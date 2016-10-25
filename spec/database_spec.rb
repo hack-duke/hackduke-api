@@ -16,8 +16,6 @@ describe 'Database Synchronization' do
 
   before :all do
     HackDukeAPI::Application.load_tasks
-    system 'bin/rails db:environment:set RAILS_ENV=test'
-    system 'bin/rails db:migrate RAILS_ENV=test'
   end
 
   describe 'Typeform and Mailchimp', :type => :request do
