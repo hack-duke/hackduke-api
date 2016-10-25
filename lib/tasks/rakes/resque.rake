@@ -13,10 +13,6 @@ namespace :resque do
     Resque.redis = 'localhost:6379'
   end
 
-  task :typeform => :setup do
-    # Typeform.perform('sync')
-  end
-
   task :mailchimp => :setup do
     Mailchimp.perform('sync')
   end
