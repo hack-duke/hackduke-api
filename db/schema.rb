@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160929090326) do
+ActiveRecord::Schema.define(version: 20161025204838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 20160929090326) do
     t.string   "session_token"
     t.string   "ethnicity"
     t.string   "dietary_restrictions",   default: [],              array: true
+    t.string   "emergency_contacts"
   end
 
   create_table "projects", force: :cascade do |t|

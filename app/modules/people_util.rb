@@ -160,7 +160,7 @@ module PeopleUtil
 
   def person_params(params)
     params = prepare_hash_as_params(params)
-    params.require(:person).permit(:first_name, :gender, :last_name, :email, :phone, :slack_id, :ethnicity, :dietary_restrictions => [])
+    params.require(:person).permit(:first_name, :gender, :last_name, :email, :phone, :slack_id, :ethnicity, :emergency_contacts, :dietary_restrictions => [])
   end
 
   def prepare_hash_as_params(params)
