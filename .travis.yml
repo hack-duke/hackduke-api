@@ -2,13 +2,21 @@ branches:
   only:
   - master
 language: ruby
+sudo: required
+dist: trusty
 rvm:
 - 2.2.3
 before_script:
 - psql -c 'create database travis_ci_test;' -U postgres
+- wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+- sudo apt-get install expect
+- chmod +u heroku.exp
+- ./heroku.exp > /dev/null
+- dropdb travis_ci_test
+- heroku pg:pull DATABASE_URL travis_ci_test --app hackduke-api
 script: bundle exec rspec spec
-services:
-- postgresql
+addons:
+  postgresql: "9.5"
 deploy:
   provider: heroku
   api_key:

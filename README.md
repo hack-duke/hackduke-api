@@ -28,7 +28,14 @@ Make sure to squash all commits upon merge, using Github's "squash and merge" fu
 Please use 2 spaces to indent
 
 ##Testing
-- Run bundle exec rspec spec to start the mailchimp + typeform integration test
+- Run the following to start the mailchimp + typeform integration test
+```
+chmod +u heroku.exp
+./heroku.exp > /dev/null HEROKU_EMAIL=*YOUR HEROKU EMAIL* HEROKU_PASSWORD=*YOUR HEROKU_PASSWORD*
+dropdb travis_ci_test
+heroku pg:pull DATABASE_URL travis_ci_test --app hackduke-api
+bundle exec rspec spec
+```
 - If the mailchimp test is failing, it may be because mailchimp is responding too slowly (try again)
 or there have been invalid emails added (you can filter them out in the MailchimpUtil module to get 
 the test to pass again)

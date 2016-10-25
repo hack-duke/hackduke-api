@@ -14,6 +14,16 @@ module TypeformData
     Event.where(active: 1).each do |event| 
       event.form_ids.each_with_index do |form_id, index|
         form_object = ActiveSupport::JSON.decode(HTTParty.get(data_api_url(form_id)).body)
+        
+        # enumerates all and increments offset if necessary
+        responses = form_object['responses']
+        offset = 1000
+        while form_object['responses'].length == 1000
+          form_object = ActiveSupport::JSON.decode(HTTParty.get(data_api_url(form_id, offset)).body)
+          responses += form_object['responses']
+          offset += 1000
+        end
+
         route = get_data_route(form_object['questions'])
         if route == ''
           no_route_error(form_id)
@@ -21,16 +31,17 @@ module TypeformData
         end
         action = route[1]
         role = route[2]
-        # the earliest (up to 1000) results are returned but are in reverse order 
-        # so they must be reversed with reverse_each
-        form_object['responses'].reverse_each.each do |r|
+
+        responses.each do |r|
           responses = {}
           responses.merge!({:params => process_form(r, event, form_id, form_object['questions'],
                                                      r['hidden']['email'], role)})
           responses.merge!({:route => "/people/#{action}_role"})
           responses.merge!({:response => r})
-          responses.merge!({:event => event})
+          responses.merge!({:event => event}) 
+
           responses_array << responses
+
         end
       end
     end
@@ -50,10 +61,10 @@ module TypeformData
                                password: Rails.application.secrets.password}})
   end
 
-  def data_api_url(fid)
+  def data_api_url(fid, offset=0)
     typeform_data_api_url = 'https://api.typeform.com/v0/form/' + fid+ '?key=' + 
                             Rails.application.secrets.typeform_api_key + 
-                            '&completed=true&order_by[]=date_submit,desc'
+                            '&completed=true&order_by[]=date_submit&offset=' + offset.to_s
   end
 
   # loops through all the attributes/column_names of the model (participant, mentor, etc.)
@@ -69,6 +80,10 @@ module TypeformData
   end
 
   def add_result_to_hash(hash, field, result, model)
+    # don't add empty links with just https://
+    if result.include? 'http://'
+      return
+    end
     if valid_result(result, field)
       result = handle_results_array_by_field(model, field, result)
       # logic to make sure we don't get nils in our arrays
@@ -182,3 +197,4 @@ end
 #     }
 #   }
 # ]
+
