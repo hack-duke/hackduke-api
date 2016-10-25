@@ -43,7 +43,7 @@ class DatabaseTester
               process_person(email, person, role, event, r, person_hash, role_question_field_hash, 
             							 person_question_field_hash, form_id, r['metadata']['date_submit'])
             else
-              # puts "Email #{email} should exist"
+              puts "Email #{email} should exist"
             end
           end
         end
