@@ -11,7 +11,7 @@ before_script:
 - wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 - sudo apt-get install expect
 - chmod +u heroku.exp
-- ./heroku.exp
+- ./heroku.exp > /dev/null
 - dropdb travis_ci_test
 - heroku pg:pull DATABASE_URL travis_ci_test --app hackduke-api
 script: bundle exec rspec spec
