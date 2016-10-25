@@ -16,7 +16,7 @@ describe 'Database Synchronization' do
 
   before :all do
     HackDukeAPI::Application.load_tasks
-    # system 'bin/rails db:environment:set RAILS_ENV=test'
+    system 'bin/rails db:environment:set RAILS_ENV=test'
     # Rails.env = ENV['RAILS_ENV'] = 'test'
     # Rake::Task['database:prepare'].invoke
     # create_events_from_prod
@@ -33,21 +33,21 @@ describe 'Database Synchronization' do
       # all_responses = generate_all_responses
       # populate_database(all_responses, 2, 1)
 
-      # database_tester = DatabaseTester.new
-      # active_events = Event.where(active: 1)
+      database_tester = DatabaseTester.new
+      active_events = Event.where(active: 1)
 
-      # puts 'Generating person hash...'
-      # person_hash = database_tester.generate_person_hash(active_events)
+      puts 'Generating person hash...'
+      person_hash = database_tester.generate_person_hash(active_events)
 
-      # valid_database = true 
-      # puts 'Cross-checking the database with the data API...'
-      # person_hash.each do |email, attribute_hash|
-      #   if !database_tester.validate_person_hash(person_hash, email, attribute_hash)
-      #     valid_database = false
-      #   end
-      # end
+      valid_database = true 
+      puts 'Cross-checking the database with the data API...'
+      person_hash.each do |email, attribute_hash|
+        if !database_tester.validate_person_hash(person_hash, email, attribute_hash)
+          valid_database = false
+        end
+      end
 
-      # expect(valid_database).to eql(true)
+      expect(valid_database).to eql(true)
 
       # puts ''
       # puts 'Making code_for_good spring 2000 (test event) and design_con spring 2016 the only active events...'
