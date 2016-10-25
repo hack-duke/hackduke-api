@@ -11,8 +11,6 @@ class EventsController < ApplicationController
   end
 
   def create_school_list
-    puts params[:season]
-    puts params[:year]
     semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
     event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
     create_school_list_mailchimp(params[:school], event, params[:from_name], params[:from_email])
