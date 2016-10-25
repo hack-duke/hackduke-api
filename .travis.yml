@@ -3,6 +3,7 @@ branches:
   - master
 language: ruby
 sudo: required
+dist: trusty
 rvm:
 - 2.2.3
 before_script:
@@ -14,8 +15,8 @@ before_script:
 - dropdb travis_ci_test
 - heroku pg:pull DATABASE_URL travis_ci_test --app hackduke-api
 script: bundle exec rspec spec
-services:
-- postgresql
+addons:
+  postgresql: "9.5"
 deploy:
   provider: heroku
   api_key:
