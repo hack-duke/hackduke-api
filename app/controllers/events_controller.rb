@@ -17,7 +17,6 @@ class EventsController < ApplicationController
     event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
     create_school_list_mailchimp(params[:school], event, params[:from_name], params[:from_email])
     render json: "Your list was created."
-
   end
 
   # creates a new event and makes a new mailchimp list for that event
