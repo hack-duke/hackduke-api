@@ -11,16 +11,16 @@ before_script:
 - wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 - sudo apt-get install expect
 - chmod +u heroku.exp
-- ./heroku.exp > /dev/null
+- "./heroku.exp > /dev/null"
 - dropdb travis_ci_test
 - heroku pg:pull DATABASE_URL travis_ci_test --app hackduke-api
 script: bundle exec rspec spec
 addons:
-  postgresql: "9.5"
+  postgresql: '9.5'
 deploy:
   provider: heroku
   api_key:
-    secure: OGRfRoGnJB5xpW3jM3gxqS0uO3XAg0ICcKChLdaWIkF07+xtgopFz8plkNQGL+g5wuohQh2xdB7zvUshTVnrMBZMN7XmlMuIr5aEBbh7XRb0PaR2kX4akblpAnFW/edn1fvwjR6O/ShxVU4FYlLVD3bSEzkAyppETGNx/fZWto8K/gNv02Jwok5zCd9iO6cehg59/3M9Y+57CL7gGfvXGpub6IDF8ug7NV6XtRXCmOvNP9cCZbTEPqOTQvEZiisbQ0HclyL5SyClbwg6yvYUoGfIvWiFgwhqGQSBAlPqC0w6wtqRCAWiFmGip9sUyspFZ3WdOgzPsMNOVu8hpxsnLPTItH8TEugdOeKUMDcvOrjTmVrj+5OMlaSw/7+fS/UqH/Yj6QViOpW3mc3sBRsFkMA87s68WuKB3AS3izc8On2SIyjsAIgHb9I+L2O+MfFUtF/3sygCI+KXySVnXveOtJeDm1DVbE5IHQN1KsSPomLyAy+sfGPECxq6JJxXpLg2OFK/ebW2Hi+YlqjgvLy61F0Pt4vZJrOjxvOery4Xt1hJ3stT5gU0lm1T+TbQ+Rwn3Nf2NSj7IugmBczCcn6+48P4fdMWPQLiRGjKTglJ8DLt4vmCb2MdDfiNj3T1wrRFE110RX1v1n7fdT4wxU7YZAvCRGvdzDToe6RxoJ2O6o4=
+    secure: E5xXP8tRjNtt8sa/mDavhS+pN4VuCCD0kfAWJ4/FK+vWATbl2vEvxA/4uqrsSYtOvbfNDfSBsbAdNaPX01YnVfr0ArKTQcaHAZLDBQ2lwlyWZ20ksttME+UIVOWX5JW/4t3BbcXRpl4hIVCdwfO+FQhWs5lxtUOzLzFGhi/2MoaiJsCkxr5NIF63uJEOh+sPDUDpaGNV/hAh0cY+9DVJSmU8bTfXhxfwqWPPj3THlD/ojRDqI11xpbXpH+7RCEvgkgtW5sRcWW/EZ2gIA1SszgAbgU5zE01mWIZatK34Z3xoCrCYYddQHDajT3xoLvb/3vSHz98fOG9W96JItiiIlVwcRLz2swGa1dg0yaVlT/XFZGlZBgE7LbkYECJLFF4dB9NnuJZT5zvsmVARQWb1bwyEO/3vLLnmKiah2HJA9fP3Iaj+ZMDwA+BE5zBrOLbHEoh7lBGNh3s/xDKbfsuMVZH9gUqnJ3XlQGb/ch/V/pA9rPEvOZ/pqII+dHJUkQlvSWxt6LkAFnPhU6qsJ0K1q3dsp9RHaILuCoam32AiFPSSR4+Yd+3skYBdg7e66TuScbCXI1A6d1wMCpdrm0WMVVMrdmYPGJ24QzcUVJiipU2OCBHvM4PbjavwQtRjCmFHCwxVp/S4+gUvdLL2RcBTUdXZDzJL+1sNjK5iV2kiarA=
   app: hackduke-api
   on:
     repo: hack-duke/hackduke-api
