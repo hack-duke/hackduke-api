@@ -2,6 +2,7 @@ branches:
   only:
   - master
 language: ruby
+sudo: required
 rvm:
 - 2.2.3
 before_script:
