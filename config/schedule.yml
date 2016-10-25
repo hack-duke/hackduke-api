@@ -1,12 +1,3 @@
-typeform:
-  every:
-    - "30m"
-  args: "sync"
-  class: Typeform
-  queue: high
-  description: Syncs database with typeform entries
-  rails_envs: development, production, staging
-
 mailchimp_subscribe:
   every:
     - "30m"

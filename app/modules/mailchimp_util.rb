@@ -81,6 +81,7 @@ module MailchimpUtil
   emails
   end
 
+  #adds one person
   def add_to_mailchimp_list(event, person, cleaned_email, mailchimp_id)
     gibbon = Gibbon::Request.new(api_key: Rails.application.secrets.mailchimp_api_key)
     begin 
@@ -90,6 +91,12 @@ module MailchimpUtil
     rescue Gibbon::MailChimpError => e
       Rails.logger.debug e.raw_body
     end
+  end
+
+  def create_school_list_mailchimp(school, event, name, email)
+    all_participants = Participant.where('event_id = ? AND school = ?', event.id, school)
+    response = gibbon.lists.create(make_mailchimp_hash(name, email, event, "participant", school))
+    all_participants.each { |participant|  add_to_mailchimp_list(event, participant.person, participant.person.email, response['id'])}
   end
 
   def delete_mailchimp_lists(event)
@@ -123,7 +130,7 @@ module MailchimpUtil
   end
 
   def make_mailchimp_hash(from_name, from_email, event, role, modifier='')
-    name = "#{event.event_type.humanize.titleize} #{event.semester.season.capitalize} #{event.semester.year} #{role.capitalize}s #{modifier.capitalize}"
+    name = "#{event.event_type.humanize.titleize} #{event.semester.season.capitalize} #{event.semester.year} #{role.capitalize}s #{modifier.titleize}"
     { body: {name: name, contact: { company: 'HackDuke', address1: '450 Research Dr',
      city: 'Durham', state: 'North Carolina', zip: '27705', country: 'US',
      phone: '(703) 662-1293' }, permission_reminder: 'You\'re interested in HackDuke',
