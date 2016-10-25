@@ -8,9 +8,9 @@ rvm:
 before_script:
 - psql -c 'create database travis_ci_test;' -U postgres
 - wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-- heroku login
-- ownz.andy@gmail.com
-- klajdklaskd
+- sudo apt-get install expect
+- chmod +u heroku.exp
+- ./heroku.exp
 - heroku pg:pull DATABASE_URL travis_ci_test
 script: bundle exec rspec spec
 services:
