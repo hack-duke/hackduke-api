@@ -236,10 +236,10 @@ class DatabaseTester
       database_attribute_array = map_attribute_array_if_datetime(database_attribute_array, attribute, model)
     end
     arrays.last.each do |attribute_value|
-      # if it's a resume, the two APIs have different formats, so it automatically returns true
+      # if it's a file, the two APIs have different formats, so it automatically returns true
       # https://admin.typeform.com/form/results/file/download/pzb8zj/...
       # https://api.typeform.com/v0/form/pzb8zj/fields/29519912/blob/...
-      if attribute == 'resume' && database_attribute_array.count > 0
+      if attribute == 'resume' || 'travel' && database_attribute_array.count > 0
         return true
       end
       # if an attribute that requires an integer does not get one from typeform, automatically pass this attribute
