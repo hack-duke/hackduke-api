@@ -49,7 +49,8 @@ class PeopleController < ApplicationController
   def id
     role_type = params[:role]
     model = role_type.classify.constantize
-    render json: {'role': model.find(params[:id])}
+    role = model.find(params[:id])
+    render json: {'role': model.find(params[:id]), 'person': role.person}
   end
 
   def authenticate
