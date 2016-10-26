@@ -167,9 +167,6 @@ class DatabaseTester
     form_id_database_array = person.send('form_id')
     submit_date_database_array = map_datetime_parse_array(person.send('submit_date'))
 
-    # removes duplicates submissions that occur at the same time, most likely due to typeform 
-    # webhook firing several times to the API (on typeform's end)
-
     # sorting the typeform array by submit_date because that's how
     # it'll appear in the database
     typeform_array = form_id_typeform_array.each_with_index.map { |x, i| 
