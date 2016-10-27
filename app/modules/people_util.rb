@@ -22,7 +22,7 @@ module PeopleUtil
         role.update_attributes(role_params(params[:role], params))
         # update status if participant and attending has become true
         if params[:role] == 'participant' && role_params[:attending] == 1
-          role.status = 2
+          role.status = 3
         end
       end
       append_to_submission_history(role, params)
