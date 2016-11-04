@@ -30,6 +30,7 @@ Please use 2 spaces to indent
 ##Testing
 - Run the following to start the mailchimp + typeform integration test
 ```
+dropdb travis_ci_test
 heroku pg:pull DATABASE_URL travis_ci_test --app hackduke-api
 bundle exec rspec spec
 ```
