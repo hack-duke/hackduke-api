@@ -35,4 +35,11 @@ module EventsUtil
     event.save!
   end
 
+  def get_slack_users
+    users = HTTParty.get('https://slack.com/api/users.list?token=' + Rails.application.secrets.hackduke_token)
+    #email to slack ID
+    users["members"]
+  end
+
+
 end

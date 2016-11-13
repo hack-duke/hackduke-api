@@ -5,6 +5,7 @@ module EventHelper
 
     options = ({basic_auth: {username: Rails.application.secrets.username, 
                                password: Rails.application.secrets.password}})
+
     events = HTTParty.get('https://hackduke-api.herokuapp.com/events', options)
     events.each do |event|
       Event.create(event)
