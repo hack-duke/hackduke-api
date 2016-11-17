@@ -31,6 +31,23 @@ class EventsController < ApplicationController
             participant.save!
           end
         end
+
+        mentor_matching_email = person_matching_email.mentor
+        mentor_matching_email.each do |mentor|
+          if mentor.event_id == 17
+            mentor.slack_id = id
+            mentor.save!
+          end
+        end
+
+        volunteer_matching_email = person_matching_email.volunteer
+        volunteer_matching_email.each do |mentor|
+          if volunteer.event_id == 17
+            volunteer.slack_id = id
+            volunteer.save!
+          end
+        end
+
       end
     end
   end
