@@ -18,32 +18,15 @@ class EventsController < ApplicationController
   end
 
   def email_to_slackID
-
-    #hash of all slackID's with emails.
-    #for the mentor bot b/c lots of judges 
     hash = {}
     get_slack_users.map do |member|
-      puts member["id"]
-      hash[member["profile"]["email"]] = member["id"]
-    end
-
-    #loop through hashEmails?
-      #p = Person.where(email from hashEmails).participant
-        #find participant that has correct event_id
-        #set their ID to be the slackID
-    hash.each do |email, id|
-      puts email
+      id = member["id"]
+      email = member["profile"]["email"]
       person_matching_email = Person.where('email = ?', email).first
-      puts "person_matching_email: "
-      puts person_matching_email
       if person_matching_email != nil 
         participant_matching_email = person_matching_email.participant
         participant_matching_email.each do |participant|
           if participant.event_id == 17
-            # hash.key(value) => key
-            # participant.id = slackID from hashEmails hash
-            puts "ID: "
-            puts id
             participant.slack_id = id
             participant.save!
           end
