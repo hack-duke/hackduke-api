@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :events do
     collection do
-      post :email_to_slackID
+      get :email_to_slackID
       post :create_school_list
       post :semester
       get :mailchimp

@@ -40,7 +40,7 @@ class EventsController < ApplicationController
         end
 
         volunteer_matching_email = person_matching_email.volunteer
-        volunteer_matching_email.each do |mentor|
+        volunteer_matching_email.each do |volunteer|
           if volunteer.event_id == 17
             volunteer.slack_id = id
             volunteer.save!
@@ -49,6 +49,7 @@ class EventsController < ApplicationController
 
       end
     end
+    render json: {:action => "Slack ids were mapped to emails."}
   end
 
   # creates a new event and makes a new mailchimp list for that event

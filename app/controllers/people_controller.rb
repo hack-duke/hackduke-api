@@ -9,12 +9,20 @@ class PeopleController < ApplicationController
   include EventsUtil
 
   def query_by_key_value
-    model = params[:role].classify.constantize
-    result = model.where("#{params[:key]} = ?", params[:value]).first
-    if params[:role] == 'person'
-      render json: result
+    semester = Semester.where('season = ? AND year = ?', Semester.seasons[params[:season]], params[:year]).first
+    event = semester.events.where('event_type = ?', Event.event_types[params[:event_type]]).first
+    if event != nil 
+      if params[:role] == 'person'
+        result = Person.where("#{params[:key]} = ?", params[:value])
+        render json: result.map {|person| {:person => person, :participant => person.participant.where(event_id: event.id), 
+                                           :volunteer => person.volunteer.where(event_id: event.id), :mentor => person.mentor.where(event_id: event.id)}}
+      else
+        roles = event.send("#{params[:role]}s")
+        result = roles.where("#{params[:key]} = ?", params[:value])
+        render json: result.map {|role| {:person => role.person, :role => role}}
+      end
     else
-      render json: {:person => result.person, :role => result}
+      render json: {:errors => 'That event does not exist'}
     end
   end
 

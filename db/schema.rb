@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161025204838) do
+ActiveRecord::Schema.define(version: 20161117194738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,8 @@ ActiveRecord::Schema.define(version: 20161025204838) do
     t.string  "skills",    default: [], array: true
     t.string  "slack_id"
     t.string  "track"
+    t.integer "status",    default: 0
+    t.string  "benefits",  default: [], array: true
     t.index ["event_id"], name: "index_mentors_on_event_id", using: :btree
     t.index ["person_id"], name: "index_mentors_on_person_id", using: :btree
   end
@@ -65,24 +67,24 @@ ActiveRecord::Schema.define(version: 20161025204838) do
     t.integer  "person_id"
     t.integer  "event_id"
     t.integer  "team_id"
-    t.integer  "status",               default: 0
+    t.integer  "status",          default: 0
     t.integer  "graduation_year"
     t.integer  "over_eighteen"
     t.integer  "attending"
     t.string   "major"
     t.string   "school"
-    t.string   "dietary_restrictions", default: [],              array: true
     t.string   "website"
     t.string   "resume"
     t.string   "github"
     t.string   "travel"
     t.string   "portfolio"
-    t.string   "skills",               default: [],              array: true
-    t.string   "custom",               default: [],              array: true
+    t.string   "skills",          default: [],              array: true
+    t.string   "custom",          default: [],              array: true
     t.string   "slack_id"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.string   "track"
+    t.string   "benefits",        default: [],              array: true
     t.index ["event_id"], name: "index_participants_on_event_id", using: :btree
     t.index ["person_id"], name: "index_participants_on_person_id", using: :btree
     t.index ["team_id"], name: "index_participants_on_team_id", using: :btree
@@ -163,6 +165,8 @@ ActiveRecord::Schema.define(version: 20161025204838) do
     t.string   "slack_id"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.integer  "status",     default: 0
+    t.string   "benefits",   default: [],              array: true
     t.index ["event_id"], name: "index_volunteers_on_event_id", using: :btree
     t.index ["person_id"], name: "index_volunteers_on_person_id", using: :btree
   end
