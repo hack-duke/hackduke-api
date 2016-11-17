@@ -18,7 +18,6 @@ class EventsController < ApplicationController
   end
 
   def email_to_slackID
-    hash = {}
     get_slack_users.map do |member|
       id = member["id"]
       email = member["profile"]["email"]
