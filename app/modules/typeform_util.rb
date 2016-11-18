@@ -1,5 +1,3 @@
-require 'logger'
-
 module TypeformUtil
 
   # determines the form's route from the hidden_field
@@ -53,7 +51,8 @@ module TypeformUtil
   end
 
   def no_route_error(fid)
-    logger.error "The typeform with form id #{fid} has no route"
+    puts fid
+    puts "The typeform with form id #{fid} has no route"
   end
 
   def valid_result(result, field)
