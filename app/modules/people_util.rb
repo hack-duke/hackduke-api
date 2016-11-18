@@ -142,15 +142,15 @@ module PeopleUtil
     when 0
       return params.require(:participant).permit(:status, :school, :website, :resume, :attending, :github, 
     																				 :portfolio, :graduation_year, :major, :over_eighteen, :slack_id, :track, 
-                                             :travel, :skills => [], :custom => [])
+                                             :travel, :skills => [], :custom => [], :benefits => [])
     when 1
       return params.require(:speaker).permit(:slack_id, :date => [], :topic => [])
     when 2
       return params.require(:judge).permit(:slack_id, :skills => [])
     when 3
-      return params.require(:mentor).permit(:status, :slack_id, :track, :skills => [])
+      return params.require(:mentor).permit(:status, :slack_id, :track, :skills => [], :benefits => [])
     when 4
-      return params.require(:volunteer).permit(:status, :slack_id, :hours, :size, :times => [], :custom => [])
+      return params.require(:volunteer).permit(:status, :slack_id, :hours, :size, :times => [], :custom => [], :benefits => [])
     when 5
       return params.require(:organizer).permit(:slack_id)
     else 
