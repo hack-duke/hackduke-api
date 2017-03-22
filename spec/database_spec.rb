@@ -39,7 +39,6 @@ describe 'Database Synchronization' do
 
       expect(valid_database).to eql(true)
 
-
       Rake::Task['database:prepare'].invoke
       create_events_from_prod
       puts 'Generating typeform responses from data API...'

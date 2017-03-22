@@ -3,6 +3,10 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 
+# for resume book generation
+gem 'combine_pdf'
+gem 'libreconv'
+
 # for slack-bots
 gem 'celluloid-io'
 gem 'slack'
