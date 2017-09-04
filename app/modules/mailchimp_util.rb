@@ -7,11 +7,11 @@ module MailchimpUtil
     temp_password = SecureRandom.hex(8)
 
     if first_time
-      template_name = "CodeForGoodWelcome2016"
+      template_name = "CodeForGoodWelcome2017"
       template_content = [{}]
       subject = 'Thanks for registering!'
     else
-      template_name = "CodeForGoodReset2016"
+      template_name = "CodeForGoodReset2017"
       template_content = [{}]
       subject = 'Your HackDuke password'
     end
