@@ -39,24 +39,24 @@ describe 'Database Synchronization' do
 
       expect(valid_database).to eql(true)
 
-      Rake::Task['database:prepare'].invoke
-      create_events_from_prod
-      puts 'Generating typeform responses from data API...'
-      all_responses = generate_all_responses
-      populate_database(all_responses, 1, 10)
-      puts 'Generating typeform responses from data API...'
-      all_responses = generate_all_responses
-      populate_database(all_responses, 2, 1)
+#       Rake::Task['database:prepare'].invoke
+#       create_events_from_prod
+#       puts 'Generating typeform responses from data API...'
+#       all_responses = generate_all_responses
+#       populate_database(all_responses, 1, 10)
+#       puts 'Generating typeform responses from data API...'
+#       all_responses = generate_all_responses
+#       populate_database(all_responses, 2, 1)
 
-      valid_database = true 
-      puts 'Cross-checking the database with the data API...'
-      person_hash.each do |email, attribute_hash|
-        if !database_tester.validate_person_hash(person_hash, email, attribute_hash)
-          valid_database = false
-        end
-      end
+#       valid_database = true 
+#       puts 'Cross-checking the database with the data API...'
+#       person_hash.each do |email, attribute_hash|
+#         if !database_tester.validate_person_hash(person_hash, email, attribute_hash)
+#           valid_database = false
+#         end
+#       end
 
-      expect(valid_database).to eql(true)
+#       expect(valid_database).to eql(true)
 
 
       # puts ''
