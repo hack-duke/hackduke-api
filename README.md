@@ -34,6 +34,10 @@ dropdb travis_ci_test
 heroku pg:pull DATABASE_URL travis_ci_test --app hackduke-api
 bundle exec rspec spec
 ```
+To run rails console with remote db use:
+```
+RAILS_ENV=test rails console
+```
 - If the mailchimp test is failing, it may be because mailchimp is responding too slowly (try again)
 or there have been invalid emails added (you can filter them out in the MailchimpUtil module to get 
 the test to pass again)
