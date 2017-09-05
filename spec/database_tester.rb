@@ -183,6 +183,7 @@ class DatabaseTester
     }
 
     puts database_array
+    puts person.email
     database_array.sort! {|x,y| x[:submit_date] <=> y[:submit_date] }
 
     form_id_database_array = database_array.map { |x| x[:form_id] } 
