@@ -182,8 +182,6 @@ class DatabaseTester
       {'form_id': x, 'submit_date': submit_date_database_array[i]} 
     }
 
-    puts database_array
-    puts person.email
     database_array.sort! {|x,y| x[:submit_date] <=> y[:submit_date] }
 
     form_id_database_array = database_array.map { |x| x[:form_id] } 
